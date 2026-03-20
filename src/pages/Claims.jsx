@@ -103,17 +103,18 @@ export default function Claims() {
 
               {/* Added CTA Video block to cover whitespace */}
               <a 
-                href="https://youtu.be/Aq5WXmQQooo?si=H22CQJvMjpklCPIb" 
+                href="https://youtu.be/FRrFncToz3k?si=fH_RbMqJAk66OlUh" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="relative block rounded-3xl overflow-hidden aspect-video group cursor-pointer border border-brand-200 shadow-sm mt-12 bg-white hover:shadow-premium transition-all"
+                className="relative block rounded-3xl overflow-hidden aspect-video group cursor-pointer border border-brand-200 shadow-sm mt-12 bg-[#F9F6F0] hover:shadow-premium transition-all flex flex-col items-center justify-center p-6"
               >
-                <div className="absolute inset-0 bg-brand-900/5 mix-blend-multiply transition-colors group-hover:bg-brand-900/10 z-10"></div>
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-48 h-48 sm:w-56 sm:h-56 object-contain z-20 group-hover:scale-110 transition-transform drop-shadow-xl text-brand-800 opacity-90 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute inset-0 bg-brand-900/5 mix-blend-multiply transition-colors group-hover:bg-brand-900/10 z-10 pointer-events-none"></div>
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-40 h-40 sm:w-48 sm:h-48 object-contain z-20 group-hover:scale-105 transition-transform drop-shadow-md text-brand-800 opacity-95">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.498 5.814a3.016 3.016 0 0 0 2.122 2.136C4.495 20.5 12 20.5 12 20.5s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.498-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  <path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="#FFF" />
                 </svg>
-                <div className="absolute bottom-6 left-0 right-0 text-center z-20">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-800 bg-white/90 backdrop-blur px-5 py-2 rounded-full shadow-sm border border-brand-100">Watch Explainer</span>
+                <div className="mt-4 z-20">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#5A4A42] bg-white px-5 py-2 rounded-full shadow-sm border border-[#EBE3D5]">Watch Explainer</span>
                 </div>
               </a>
             </div>
