@@ -6,44 +6,7 @@ import { ScrollReveal } from '../components/ScrollReveal';
 import { MapPin, CheckCircle, ChevronDown } from 'lucide-react';
 import DynamicPricingCalculator from '../components/DynamicPricingCalculator';
 
-const tiers = [
-  {
-    label: 'LOW RISK',
-    badge: 'Tier 01',
-    tagline: 'Rain & Low Demand',
-    zone: 'Smaller cities, Medium Payout',
-    price: 29,
-    payoutCap: '₹1,500 Payout Cap',
-    payoutNote: 'Maximum coverage for lower-risk zones',
-    perk: 'Quick Processing',
-    perkNote: 'Most claims under 60 minutes',
-    highlight: false,
-  },
-  {
-    label: 'MEDIUM RISK',
-    badge: 'Tier 02 — Most Popular',
-    tagline: "Bengaluru's moderate-risk Plan",
-    zone: 'Metro, Mumbai, Delhi NCR',
-    price: 45,
-    payoutCap: '₹2,500 Payout Cap',
-    payoutNote: 'Up to 25% income coverage',
-    perk: 'Instant Add-ons',
-    perkNote: 'Add city surge cover any Sunday midnight',
-    highlight: true,
-  },
-  {
-    label: 'HIGH RISK',
-    badge: 'Tier 03',
-    tagline: 'Unfavorable zones, high storms',
-    zone: 'Storm cities, Sensitive Hubs',
-    price: 75,
-    payoutCap: '₹5,000 Payout Cap',
-    payoutNote: 'Maximum coverage for high-risk storms',
-    perk: 'Priority Support',
-    perkNote: 'Dedicated agent available 24/7',
-    highlight: false,
-  },
-];
+
 
 const faqs = [
   {
@@ -82,15 +45,12 @@ export default function Coverage() {
             <p className="text-brand-800 text-base mb-8 max-w-md leading-relaxed">
               Kizuna adapts to your geography and risk profile. We provide a policy that fits your environment directly, ensuring you're never overpaying or under-protected.
             </p>
-            <Button to="/register" variant="primary" className="px-8 py-3 rounded-full font-medium">
-              Get Started Free
-            </Button>
           </ScrollReveal>
 
           <ScrollReveal direction="left" delay={200}>
             <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-premium">
               <img
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1000&auto=format&fit=crop"
+                src="/female-gig-worker.jpg"
                 alt="Gig worker on scooter"
                 className="w-full h-full object-cover"
               />
@@ -99,82 +59,13 @@ export default function Coverage() {
           </ScrollReveal>
         </section>
 
-        {/* Pricing Tiers */}
-        <section className="max-w-6xl mx-auto">
-          <ScrollReveal direction="up">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-serif mb-2">Choose your Shield Level</h2>
-                <p className="text-brand-800 text-sm max-w-md">
-                  Our risk tiers are calculated using Historical Incident data and localized weather patterns
-                  to find the zone that matches your primary operating hub.
-                </p>
-              </div>
-              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-500 bg-white border border-brand-200 px-4 py-2 rounded-full whitespace-nowrap">
-                <MapPin size={12} /> Auto-detecting your zone...
-              </div>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {tiers.map((tier, i) => (
-              <ScrollReveal key={tier.label} direction="up" delay={i * 100}>
-                <div
-                  className={`relative rounded-3xl p-8 flex flex-col gap-5 h-full transition-all border ${
-                    tier.highlight
-                      ? 'bg-brand-900 text-brand-50 border-brand-900 shadow-2xl scale-[1.03]'
-                      : 'bg-white text-brand-900 border-brand-200 shadow-sm hover:shadow-premium'
-                  }`}
-                >
-                  {tier.highlight && (
-                    <div className="absolute top-4 right-4 bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full flex items-center gap-1">
-                      <CheckCircle size={10} /> Most Popular
-                    </div>
-                  )}
-                  <div>
-                    <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${tier.highlight ? 'text-brand-300' : 'text-brand-400'}`}>
-                      {tier.badge}
-                    </p>
-                    <h3 className={`font-serif text-2xl mb-1 ${tier.highlight ? 'text-white' : 'text-brand-900'}`}>
-                      {tier.label.charAt(0) + tier.label.slice(1).toLowerCase().replace('risk', 'Risk')}
-                    </h3>
-                    <p className={`text-xs ${tier.highlight ? 'text-brand-300' : 'text-brand-500'}`}>{tier.tagline}</p>
-                  </div>
-
-                  <div className="flex items-baseline gap-1">
-                    <span className={`font-serif text-5xl ${tier.highlight ? 'text-white' : 'text-brand-900'}`}>₹{tier.price}</span>
-                    <span className={`text-sm ${tier.highlight ? 'text-brand-300' : 'text-brand-500'}`}>/week</span>
-                  </div>
-
-                  <div className={`text-xs space-y-3 flex-1 ${tier.highlight ? 'text-brand-200' : 'text-brand-600'}`}>
-                    <div className="flex items-start gap-2">
-                      <MapPin size={12} className="shrink-0 mt-0.5" />
-                      <span><strong className={tier.highlight ? 'text-white' : 'text-brand-900'}>{tier.payoutCap}</strong><br />{tier.payoutNote}</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle size={12} className="shrink-0 mt-0.5" />
-                      <span><strong className={tier.highlight ? 'text-white' : 'text-brand-900'}>{tier.perk}</strong><br />{tier.perkNote}</span>
-                    </div>
-                  </div>
-
-                  <Button
-                    to="/register"
-                    variant={tier.highlight ? 'accent' : 'outline'}
-                    className={`w-full rounded-2xl mt-2 ${tier.highlight ? 'bg-white text-brand-900 hover:bg-brand-50' : 'border-brand-200'}`}
-                  >
-                    Select {tier.label.charAt(0) + tier.label.slice(1).toLowerCase().replace('risk', 'Risk')}
-                  </Button>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </section>
 
         {/* Dynamic Pricing Calculator Section */}
         <section className="max-w-6xl mx-auto space-y-12">
           <ScrollReveal direction="up">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-serif mb-4">Calculate Your Dynamic Premium</h2>
+              <h2 className="text-4xl md:text-5xl font-serif mb-2 text-brand-900">Calculate Your Dynamic Premium</h2>
+              <p className="text-brand-500 font-serif text-xl italic mb-6">Don’t want to sign up yet? Estimate your weekly premium instantly.</p>
               <p className="text-brand-800 text-sm max-w-2xl mx-auto">
                 Kizuna doesn't believe in flat rates. Your protection costs are as unique as your work history. 
                 Use the tool below to see how your zone, trust score, and risk profile impact your weekly premium.
