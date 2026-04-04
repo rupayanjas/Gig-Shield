@@ -22,16 +22,15 @@ const Navbar = () => {
     <nav className="w-full px-6 py-6 absolute top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link to={isAuth ? "/dashboard" : "/"} className="flex items-center gap-3">
-          <div className="relative group flex items-center gap-3">
-            <div className="relative w-10 h-10 bg-brand-900 rounded-lg flex items-center justify-center overflow-hidden">
-               <img src="/logo.png" alt="Kizuna" className="h-7 w-auto object-contain" />
-               <div className="absolute inset-0 bg-brand-900/10 mix-blend-overlay"></div>
-            </div>
-            <span className="font-serif text-2xl tracking-tighter text-brand-900 font-bold group-hover:text-brand-800 transition-colors">
-              Kizuna
-            </span>
+        <Link to={isAuth ? "/dashboard" : "/"} className="relative group inline-flex items-center justify-center py-2 pr-4">
+          {/* Logo as background */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity pointer-events-none -ml-4">
+             <img src="/logo.png" alt="" className="h-16 w-auto object-contain blur-[1px]" />
           </div>
+          {/* Text Foreground */}
+          <span className="relative z-10 font-serif text-4xl md:text-[2.75rem] italic font-semibold tracking-tight text-brand-900 group-hover:text-brand-800 transition-colors">
+            Kizuna
+          </span>
         </Link>
 
         {/* Desktop Nav Links */}

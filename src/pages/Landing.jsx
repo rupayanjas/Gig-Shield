@@ -21,17 +21,17 @@ export default function Landing() {
             Income Protection <span className="italic">Built</span> for the Gig Economy
           </h1>
           
-          <div className="space-y-4 mb-10">
+          <div className="space-y-6 mb-10">
             {[
               "Protects your income from weather disruptions",
               "Covers platform downtime and zone closures",
               "Ensures consistent earnings even when you can’t work"
             ].map((bullet, i) => (
-              <div key={i} className="flex items-center gap-3 text-brand-800">
-                <div className="w-5 h-5 rounded-full bg-brand-900 flex items-center justify-center text-white shrink-0">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <div key={i} className="flex items-center gap-4 text-brand-900">
+                <div className="w-6 h-6 rounded-full bg-[#4A362B] flex items-center justify-center text-white shrink-0 shadow-sm border border-brand-800">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
-                <span className="font-medium">{bullet}</span>
+                <span className="font-medium text-[15px]">{bullet}</span>
               </div>
             ))}
           </div>
