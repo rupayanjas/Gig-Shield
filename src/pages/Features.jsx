@@ -34,7 +34,7 @@ export default function Features() {
             </h1>
 
             <p className="text-brand-800 text-base mb-8 max-w-md leading-relaxed">
-              From unexpected disruptions to platform downtime, GigShield ensures you never walk away from a shift empty-handed.
+              From unexpected disruptions to platform downtime, Kizuna ensures you never walk away from a shift empty-handed.
             </p>
 
             {/* Feature Highlights */}
@@ -180,7 +180,7 @@ export default function Features() {
                   <CheckCircle2 size={20} />
                 </div>
                 <h3 className="font-serif text-xl text-brand-900 mb-2">Automated claim deduction</h3>
-                <p className="text-sm text-brand-800 leading-relaxed">GigShield connects to your platform to detect issues via public supply/demand APIs and alerts.</p>
+                <p className="text-sm text-brand-800 leading-relaxed">Kizuna connects to your platform to detect issues via public supply/demand APIs and alerts.</p>
               </Card>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={400}>
@@ -216,7 +216,7 @@ export default function Features() {
                 Your protection should be too.
               </h2>
               <p className="text-brand-800">
-                GigShield's business framework ML models your specific shift routines and acts exactly as they differ across the gig ecosystem — past your data allowance limits.
+                Kizuna's business framework ML models your specific shift routines and acts exactly as they differ across the gig ecosystem — past your data allowance limits.
               </p>
             </ScrollReveal>
             
@@ -434,7 +434,7 @@ export default function Features() {
                 Know your risk before you lose income.
               </h2>
               <p className="text-brand-800 text-lg mb-8">
-                GigShield analyzes market volatility, weather, and demand to warn you of potential disruptions before they hit your wallet.
+                Kizuna analyzes market volatility, weather, and demand to warn you of potential disruptions before they hit your wallet.
               </p>
               
               <ul className="space-y-5">

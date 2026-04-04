@@ -65,23 +65,43 @@ export const login = (phone, platformId) => {
   
   // Accept any login for demo
   const token = btoa(`${phone}:${platformId}-${Date.now()}`);
-  sessionStorage.setItem('gigshield_session_token', token);
-  localStorage.setItem('gigshield_user_profile', JSON.stringify(MOCK_USER));
+  sessionStorage.setItem('kizuna_session_token', token);
+  
+  // Check if user already exists in localstorage, otherwise use MOCK_USER
+  if (!localStorage.getItem('kizuna_user_profile')) {
+    localStorage.setItem('kizuna_user_profile', JSON.stringify(MOCK_USER));
+  }
+  return true;
+};
+
+export const register = (phone, profileData) => {
+  if (!phone) return false;
+  
+  const token = btoa(`${phone}-new-${Date.now()}`);
+  sessionStorage.setItem('kizuna_session_token', token);
+  
+  // Merge the dynamically created profile with the mock outline so they have claims/history
+  const fullProfile = {
+    ...MOCK_USER,
+    ...profileData
+  };
+  
+  localStorage.setItem('kizuna_user_profile', JSON.stringify(fullProfile));
   return true;
 };
 
 export const logout = () => {
-  sessionStorage.removeItem('gigshield_session_token');
+  sessionStorage.removeItem('kizuna_session_token');
   // keep localStorage profile to not lose demographic data if needed, but for security usually wipe it
-  localStorage.removeItem('gigshield_user_profile');
+  localStorage.removeItem('kizuna_user_profile');
 };
 
 export const isAuthenticated = () => {
-  return !!sessionStorage.getItem('gigshield_session_token') && !!localStorage.getItem('gigshield_user_profile');
+  return !!sessionStorage.getItem('kizuna_session_token') && !!localStorage.getItem('kizuna_user_profile');
 };
 
 export const getUser = () => {
   if (!isAuthenticated()) return null;
-  const user = localStorage.getItem('gigshield_user_profile');
+  const user = localStorage.getItem('kizuna_user_profile');
   return user ? JSON.parse(user) : null;
 };

@@ -18,10 +18,10 @@ const Footer = () => {
         {/* Brand Col */}
         <div className="space-y-4">
           <Link to="/" className="text-2xl font-serif italic font-medium text-brand-900">
-            GigShield
+            Kizuna
           </Link>
           <p className="text-brand-800 mt-2 max-w-xs">
-            © 2024 GigShield. Protective Editorial.<br/>
+            © 2024 Kizuna. Protective Editorial.<br/>
             Professional income protection for the modern workforce.
           </p>
         </div>

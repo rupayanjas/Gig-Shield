@@ -23,7 +23,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to={isAuth ? "/dashboard" : "/"} className="text-2xl font-serif italic font-medium text-brand-900 tracking-tight">
-          GigShield
+          Kizuna
         </Link>
 
         {/* Desktop Nav Links */}

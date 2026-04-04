@@ -40,7 +40,7 @@ export default function Earnings() {
             Earnings
           </h1>
           <p className="text-brand-800 text-sm">
-            Track your income and see how GigShield protects your baseline.
+            Track your income and see how Kizuna protects your baseline.
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export default function Earnings() {
                 <div>
                   <h4 className="font-bold text-sm text-brand-900">{week.week}</h4>
                   {week.shielded > 0 && (
-                    <p className="text-xs text-brand-500 mt-1">Includes ₹{week.shielded} GigShield payout</p>
+                    <p className="text-xs text-brand-500 mt-1">Includes ₹{week.shielded} Kizuna payout</p>
                   )}
                 </div>
                 <div className="text-right">

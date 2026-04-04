@@ -79,7 +79,7 @@ export default function Coverage() {
               <span className="italic">for your<br/>Hustle</span>
             </h1>
             <p className="text-brand-800 text-base mb-8 max-w-md leading-relaxed">
-              GigShield adapts to your geography and risk profile. We provide a policy that fits your environment directly, ensuring you're never overpaying or under-protected.
+              Kizuna adapts to your geography and risk profile. We provide a policy that fits your environment directly, ensuring you're never overpaying or under-protected.
             </p>
             <Button to="/register" variant="primary" className="px-8 py-3 rounded-full font-medium">
               Get Started Free
@@ -177,7 +177,7 @@ export default function Coverage() {
                 <div className="w-10 h-10 rounded-xl bg-accent-light flex items-center justify-center text-[#8A5A44] mb-4 text-lg font-serif">₹</div>
                 <h3 className="font-serif text-2xl mb-3">Weekly Premium Model</h3>
                 <p className="text-brand-800 text-sm leading-relaxed max-w-md">
-                  Unlike traditional insurance with annual payments, GigShield operates on a weekly cycle. This aligns with your income flow, allowing you to pause, upgrade, or downgrade your protection every Sunday at midnight.
+                  Unlike traditional insurance with annual payments, Kizuna operates on a weekly cycle. This aligns with your income flow, allowing you to pause, upgrade, or downgrade your protection every Sunday at midnight.
                 </p>
               </div>
               <div>

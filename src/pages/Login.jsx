@@ -121,8 +121,8 @@ const Login = () => {
       <footer className="w-full text-center py-10 mt-auto opacity-80">
         <div className="flex justify-center flex-wrap gap-8 text-brand-800 text-sm max-w-4xl mx-auto border-t border-brand-200 pt-8">
             <div className="text-left">
-              <span className="font-serif italic font-medium text-lg leading-none">GigShield</span>
-              <p className="mt-2 text-xs opacity-70">© 2024 GigShield. Protective Editorial.<br/>Professional income protection for the<br/>modern workforce.</p>
+              <span className="font-serif italic font-medium text-lg leading-none">Kizuna</span>
+              <p className="mt-2 text-xs opacity-70">© 2024 Kizuna. Protective Editorial.<br/>Professional income protection for the<br/>modern workforce.</p>
             </div>
             {/* Dummy footer links matching image bottom */}
             <div className="flex space-x-12 ml-auto text-xs">

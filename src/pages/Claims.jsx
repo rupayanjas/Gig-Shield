@@ -19,7 +19,7 @@ export default function Claims() {
                 Claims <span className="italic text-brand-800">without</span> claims
               </h1>
               <p className="text-brand-800 text-lg mb-8 max-w-md">
-                GigShield detects disruptions automatically and sends payouts instantly. No forms, no calls, no stress.
+                Kizuna detects disruptions automatically and sends payouts instantly. No forms, no calls, no stress.
               </p>
               <p className="text-sm text-brand-500 italic mb-5">
                 "Powered by real-time weather, platform, and system data"
@@ -45,7 +45,7 @@ export default function Claims() {
             <div className="relative justify-self-center lg:justify-self-end w-full max-w-md aspect-square bg-[#FDEEDB] rounded-3xl overflow-hidden flex items-center justify-center border border-brand-200 shadow-premium group">
                <img 
                  src="/claims-hand.png" 
-                 alt="Using GigShield on phone" 
+                 alt="Using Kizuna on phone" 
                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" 
                />
                <div className="absolute inset-0 bg-gradient-to-t from-brand-900/5 to-transparent pointer-events-none mix-blend-multiply"></div>
@@ -94,11 +94,11 @@ export default function Claims() {
                 What triggers <span className="italic text-brand-800">The Shield?</span>
               </h2>
               <p className="text-brand-800 text-lg mb-8 max-w-md">
-                We cover the invisible gaps in your workday. From nature's unpredictability to digital infrastructure failures, GigShield acts as your editorial-first human shield.
+                We cover the invisible gaps in your workday. From nature's unpredictability to digital infrastructure failures, Kizuna acts as your editorial-first human shield.
               </p>
               <Card className="bg-white border text-brand-800 text-sm italic font-serif">
                 <span className="font-sans font-bold text-[10px] uppercase tracking-widest text-brand-500 not-italic block mb-2 flex items-center gap-2"><Lock size={12}/> Coverage Policy</span>
-                "GigShield reserves the right to automatically initiate claims based on verified third-party data feeds, ensuring absolute neutrality and speed."
+                "Kizuna reserves the right to automatically initiate claims based on verified third-party data feeds, ensuring absolute neutrality and speed."
               </Card>
 
               {/* Added CTA Video block to cover whitespace */}
