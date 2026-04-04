@@ -20,10 +20,8 @@ const Login = () => {
     }
   };
 
-  const handleUpiLogin = () => {
-    // Quick demo login
-    login('9876543210', 'Blinkit');
-    navigate('/dashboard');
+  const handleNavigateToRegister = () => {
+    navigate('/register');
   };
 
   return (
@@ -102,15 +100,11 @@ const Login = () => {
                 type="button" 
                 variant="accent" 
                 className="w-full py-4 text-brand-900 rounded-2xl font-semibold border border-brand-200/50"
-                onClick={handleUpiLogin}
+                onClick={handleNavigateToRegister}
               >
                 <Smartphone className="mr-2" size={20} />
-                Login with UPI
+                Register
               </Button>
-
-              <p className="text-center text-sm text-brand-800 pt-4">
-                Don't have an account? <Link to="/register" className="font-bold text-brand-900 hover:underline">Secure your income now</Link>
-              </p>
 
             </form>
           </Card>

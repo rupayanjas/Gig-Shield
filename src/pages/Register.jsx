@@ -131,9 +131,15 @@ export default function Register() {
                     </label>
                     <input
                       type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxlength="10"
                       placeholder="e.g. 9876543210"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, '');
+                        if (val.length <= 10) setPhone(val);
+                      }}
                       className="w-full bg-brand-50 border-none rounded-xl px-4 py-3.5 text-brand-900 placeholder:text-brand-400 focus:ring-2 focus:ring-brand-800 focus:outline-none transition-all"
                       required
                     />
@@ -144,7 +150,7 @@ export default function Register() {
                       Primary Platform
                     </label>
                     <div className="grid grid-cols-2 gap-3">
-                      {['Zomato', 'Swiggy', 'Blinkit', 'Zepto'].map(p => (
+                      {['Blinkit', 'Zepto', 'Swiggy Instamart', 'Flipkart Minutes'].map(p => (
                         <div 
                           key={p}
                           onClick={() => setPlatform(p)}
@@ -166,7 +172,7 @@ export default function Register() {
                     </p>
                   </div>
 
-                  <Button type="submit" variant="primary" className="w-full py-4 text-base rounded-2xl" disabled={!phone || !platform}>
+                  <Button type="submit" variant="primary" className="w-full py-4 text-base rounded-2xl" disabled={phone.length !== 10 || !platform}>
                     Next: Identity Verification
                   </Button>
 
@@ -219,15 +225,21 @@ export default function Register() {
                     </label>
                     <input
                       type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxlength="12"
                       placeholder="Enter 12-digit UAN"
                       value={eShramUAN}
-                      onChange={(e) => setEShramUAN(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, '');
+                        if (val.length <= 12) setEShramUAN(val);
+                      }}
                       className="w-full bg-brand-50 border border-brand-200 rounded-xl px-4 py-3.5 text-brand-900 placeholder:text-brand-400 focus:ring-2 focus:ring-brand-800 focus:outline-none transition-all tracking-widest font-mono text-center"
                     />
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <Button type="submit" variant="primary" className="w-full py-4 text-base rounded-2xl" disabled={eShramUAN.length < 5}>
+                    <Button type="submit" variant="primary" className="w-full py-4 text-base rounded-2xl" disabled={eShramUAN.length !== 12}>
                       Verify & Boost Score
                     </Button>
                     <button type="button" onClick={handleSkipEShram} className="w-full py-3 text-sm font-bold text-brand-500 hover:text-brand-900 hover:bg-brand-50 rounded-xl transition-all">
@@ -343,7 +355,7 @@ export default function Register() {
                       <span className="sr-only">Select {tier.name}</span>
                     </button>
                     
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-brand-900">
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-brand-900 pointer-events-none">
                       <ArrowRight size={20} />
                     </div>
                   </div>
