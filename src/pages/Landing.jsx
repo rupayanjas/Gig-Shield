@@ -21,7 +21,7 @@ export default function Landing() {
             Income Protection <span className="italic">Built</span> for the Gig Economy
           </h1>
           
-          <div className="space-y-6 mb-10">
+          <div className="space-y-12 mb-10 mt-8">
             {[
               "Protects your income from weather disruptions",
               "Covers platform downtime and zone closures",
