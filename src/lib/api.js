@@ -5,6 +5,16 @@
 
 const BASE = ''; // Relative URL — works with Vercel dev proxy
 
+async function fetchJson(url, options = {}) {
+  const res = await fetch(url, options);
+  const contentType = res.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    const text = await res.text();
+    throw new Error(`Server returned non-JSON response: ${text.substring(0, 50)}...`);
+  }
+  return res.json();
+}
+
 // ─────────────────────── Aggregated Dashboard ───────────────────────
 
 /**
@@ -12,26 +22,23 @@ const BASE = ''; // Relative URL — works with Vercel dev proxy
  * Returns { success, data: { user, claims, triggers } }
  */
 export async function getDashboardData(phone) {
-  const res = await fetch(`${BASE}/api/dashboard?phone=${encodeURIComponent(phone)}`);
-  return res.json();
+  return fetchJson(`${BASE}/api/dashboard?phone=${encodeURIComponent(phone)}`);
 }
 
 // ─────────────────────── Users ───────────────────────
 
 /** Look up a user by phone. Returns { success, data } */
 export async function getUserByPhone(phone) {
-  const res = await fetch(`${BASE}/api/test?phone=${encodeURIComponent(phone)}`);
-  return res.json();
+  return fetchJson(`${BASE}/api/test?phone=${encodeURIComponent(phone)}`);
 }
 
 /** Register a new user. Returns { success, data, trustScore } */
 export async function createUser(payload) {
-  const res = await fetch(`${BASE}/api/test`, {
+  return fetchJson(`${BASE}/api/test`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  return res.json();
 }
 
 // ─────────────────────── Triggers ───────────────────────
