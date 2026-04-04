@@ -91,6 +91,7 @@ export default function LiveDataPanel({ liveUser, triggers, claims, loading, err
       const result = await createTrigger({
         type: randomType,
         city: liveUser.city,
+        userId: liveUser._id,
         severity: randomSeverity,
         startTime: now.toISOString(),
         endTime: endTime.toISOString(),

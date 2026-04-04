@@ -20,15 +20,24 @@ export default async function handler(req, res) {
     }
 
     case 'POST': {
-      // Create a trigger and auto-generate claims for users in the same city
+      // Create a trigger and auto-generate claims for user(s)
       try {
-        const trigger = await Trigger.create(req.body);
+        const triggerPayload = req.body;
+        const trigger = await Trigger.create(triggerPayload);
 
         // --- AUTO CLAIM GENERATION ---
-        // Find all users in the same city as this trigger
-        const usersInCity = await User.find({ city: trigger.city });
+        let usersToProcess = [];
 
-        const claimPromises = usersInCity.map(async (user) => {
+        // If a specific userId triggered this event, ONLY process them (Isolated Demo Mode)
+        if (triggerPayload.userId) {
+          const specificUser = await User.findById(triggerPayload.userId);
+          if (specificUser) usersToProcess.push(specificUser);
+        } else {
+          // Fallback: Global event for all users in the city
+          usersToProcess = await User.find({ city: trigger.city });
+        }
+
+        const claimPromises = usersToProcess.map(async (user) => {
           try {
             const status = determineClaimStatus(user.trustScore);
             const payoutAmount = calculatePayout(trigger.severity, user.trustScore);
@@ -41,7 +50,6 @@ export default async function handler(req, res) {
             });
           } catch (claimError) {
             // Silently skip duplicate or invalid claim creation
-            // (compound index on userId+triggerId prevents duplicates)
           }
         });
 
@@ -49,7 +57,7 @@ export default async function handler(req, res) {
 
         return res.status(201).json({
           success: true,
-          message: `Trigger created. Auto-generated claims for ${usersInCity.length} user(s) in ${trigger.city}.`,
+          message: `Trigger created. Auto-generated claims for ${usersToProcess.length} user(s).`,
           data: trigger,
         });
       } catch (error) {

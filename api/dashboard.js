@@ -24,22 +24,20 @@ export default async function handler(req, res) {
   await dbConnect(); // reuses global.mongoose cached connection
 
   try {
-    // Step 1 — user and triggers are independent; fetch in parallel
-    const [user, triggers] = await Promise.all([
-      User.findOne({ phone }).lean(), // .lean() returns plain JS object — faster than Mongoose doc
-      Trigger.find({ isActive: true }).sort({ createdAt: -1 }).lean(),
-    ]);
+    // Step 1 — Fetch the user first (needed to filter triggers and claims)
+    const user = await User.findOne({ phone }).lean();
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found.' });
     }
 
-    // Step 2 — claims need userId from step 1
-    const claims = await Claim
-      .find({ userId: user._id })
-      .select('triggerId status payoutAmount createdAt')
-      .sort({ createdAt: -1 })
-      .lean();
+    // Step 2 — Fetch triggers (specific to this user) and claims in parallel
+    const [triggers, claims] = await Promise.all([
+      Trigger.find({ isActive: true, userId: user._id }).sort({ createdAt: -1 }).lean(),
+      Claim.find({ userId: user._id }).select('triggerId status payoutAmount createdAt').sort({ createdAt: -1 }).lean(),
+    ]);
+
+
 
     return res.status(200).json({
       success: true,

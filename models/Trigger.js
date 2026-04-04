@@ -7,6 +7,11 @@ const TriggerSchema = new mongoose.Schema(
       required: [true, 'Trigger type is required.'],
       enum: ['rain', 'pollution', 'app_downtime', 'dark_store', 'incentive_break'],
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: false, // Optional for backwards compatibility, but used for new simulated triggers
+    },
     city: {
       type: String,
       required: [true, 'City is required.'],

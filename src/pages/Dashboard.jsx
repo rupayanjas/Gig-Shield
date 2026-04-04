@@ -334,13 +334,10 @@ export default function Dashboard() {
 
       {/* ── HARDCODED: Floating Widget ── */}
       <ScrollReveal direction="up" delay={500} className="fixed bottom-6 right-6 z-50">
-        <div className="bg-brand-900 text-brand-50 rounded-2xl p-4 shadow-2xl flex flex-col gap-3 min-w-[200px]">
+        <div className="bg-brand-900 text-brand-50 rounded-xl px-5 py-3 shadow-2xl flex flex-col justify-center min-w-[140px]">
           <span className="text-[10px] font-bold uppercase tracking-widest text-brand-400">
             {liveLoading ? 'Loading…' : `${coverageTierName} Plan`}
           </span>
-          <button className="bg-accent-light text-brand-900 font-medium py-2 px-4 rounded-xl text-sm hover:bg-white transition-colors">
-            Upgrade Coverage
-          </button>
         </div>
       </ScrollReveal>
     </div>
