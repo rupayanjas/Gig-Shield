@@ -51,7 +51,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error('Login Error:', err);
-      setError('Failed to connect to server. Please check your connection.');
+      setError(err.message || 'Failed to connect to server. Please check your connection.');
     } finally {
       setLoading(false);
     }
