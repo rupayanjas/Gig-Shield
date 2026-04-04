@@ -221,9 +221,13 @@ export default function Register() {
                         <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-400" size={18} />
                         <input
                           type="text"
+                          maxLength="10"
                           placeholder={`${platform} ID (e.g. ${platform.slice(0,3).toUpperCase()}-123)`}
                           value={partnerId}
-                          onChange={(e) => setPartnerId(e.target.value.toUpperCase())}
+                          onChange={(e) => {
+                            const val = e.target.value.toUpperCase();
+                            if (val.length <= 10) setPartnerId(val);
+                          }}
                           className="w-full bg-brand-50 border-none rounded-xl pl-12 pr-4 py-3.5 text-brand-900 placeholder:text-brand-400 focus:ring-2 focus:ring-brand-800 focus:outline-none transition-all"
                           required
                         />
@@ -231,7 +235,12 @@ export default function Register() {
                     </div>
                   )}
 
-                  <Button type="submit" variant="primary" className="w-full py-4 text-base rounded-2xl" disabled={!name || phone.length !== 10 || !platform || !partnerId}>
+                  <Button 
+                    type="submit" 
+                    variant="primary" 
+                    className="w-full py-4 text-base rounded-2xl" 
+                    disabled={!name || phone.length !== 10 || !platform || partnerId.length < 8 || partnerId.length > 10}
+                  >
                     Next: Verification
                   </Button>
                 </form>
