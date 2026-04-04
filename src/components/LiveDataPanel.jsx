@@ -115,18 +115,70 @@ export default function LiveDataPanel({ liveUser, triggers, claims, loading, err
 
   if (loading) {
     return (
-      <div className="rounded-3xl border border-brand-100 bg-white p-8 flex items-center justify-center gap-3 text-brand-500">
-        <div className="w-4 h-4 border-2 border-brand-300 border-t-brand-800 rounded-full animate-spin" />
-        <span className="text-sm font-medium">Fetching live data…</span>
+      <div className="space-y-6">
+        {/* Skeleton header row */}
+        <div className="flex items-center justify-between">
+          <div className="h-6 w-36 bg-brand-100 rounded-full animate-pulse" />
+          <div className="h-9 w-36 bg-brand-100 rounded-xl animate-pulse" />
+        </div>
+        {/* Skeleton cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Trust Score skeleton */}
+          <div className="bg-white rounded-2xl border border-brand-100 p-6 flex flex-col items-center shadow-sm space-y-4">
+            <div className="h-3 w-20 bg-brand-100 rounded animate-pulse" />
+            <div className="w-28 h-28 rounded-full bg-brand-100 animate-pulse" />
+            <div className="h-4 w-24 bg-brand-100 rounded animate-pulse" />
+            <div className="h-3 w-32 bg-brand-100 rounded animate-pulse" />
+            <div className="w-full space-y-2 mt-2">
+              {[1,2,3].map(i => <div key={i} className="h-3 w-full bg-brand-100 rounded animate-pulse" />)}
+            </div>
+          </div>
+          {/* Triggers skeleton */}
+          <div className="bg-white rounded-2xl border border-brand-100 p-6 shadow-sm space-y-3">
+            <div className="h-3 w-28 bg-brand-100 rounded animate-pulse" />
+            {[1,2,3].map(i => (
+              <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-brand-50 border border-brand-100">
+                <div className="w-8 h-8 rounded-full bg-brand-100 animate-pulse shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 w-3/4 bg-brand-100 rounded animate-pulse" />
+                  <div className="h-2 w-1/2 bg-brand-100 rounded animate-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Claims skeleton */}
+          <div className="bg-white rounded-2xl border border-brand-100 p-6 shadow-sm space-y-3">
+            <div className="h-3 w-24 bg-brand-100 rounded animate-pulse" />
+            {[1,2,3].map(i => (
+              <div key={i} className="p-3 rounded-xl bg-brand-50 border border-brand-100 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="h-4 w-20 bg-brand-100 rounded-full animate-pulse" />
+                  <div className="h-4 w-12 bg-brand-100 rounded animate-pulse" />
+                </div>
+                <div className="h-2 w-32 bg-brand-100 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
 
-  if (error || !liveUser) {
+  if (error) {
     return (
       <div className="rounded-3xl border border-red-100 bg-red-50 p-6 flex items-center gap-3 text-red-600">
         <AlertCircle size={18} />
-        <p className="text-sm font-medium">{error || 'Your account was not found in the backend. Please ensure you are registered.'}</p>
+        <p className="text-sm font-medium">{error}</p>
+      </div>
+    );
+  }
+
+  // Not in backend yet — non-blocking empty state with Simulate button disabled
+  if (!liveUser) {
+    return (
+      <div className="rounded-3xl border border-brand-100 bg-white p-6 flex items-center gap-3 text-brand-500">
+        <AlertCircle size={18} className="opacity-40" />
+        <p className="text-sm font-medium">Account not found in backend. Register to see live data.</p>
       </div>
     );
   }

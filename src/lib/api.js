@@ -5,6 +5,17 @@
 
 const BASE = ''; // Relative URL — works with Vercel dev proxy
 
+// ─────────────────────── Aggregated Dashboard ───────────────────────
+
+/**
+ * Single-request fetch for all dashboard data.
+ * Returns { success, data: { user, claims, triggers } }
+ */
+export async function getDashboardData(phone) {
+  const res = await fetch(`${BASE}/api/dashboard?phone=${encodeURIComponent(phone)}`);
+  return res.json();
+}
+
 // ─────────────────────── Users ───────────────────────
 
 /** Look up a user by phone. Returns { success, data } */
