@@ -170,50 +170,14 @@ export default function Coverage() {
           </div>
         </section>
 
-        {/* Weekly Model + Zone Classification + Testimonial */}
-        <section className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <ScrollReveal direction="right">
-            <div className="space-y-12">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-accent-light flex items-center justify-center text-[#8A5A44] mb-4 text-lg font-serif">₹</div>
-                <h3 className="font-serif text-2xl mb-3">Weekly Premium Model</h3>
-                <p className="text-brand-800 text-sm leading-relaxed max-w-md">
-                  Unlike traditional insurance with annual payments, Kizuna operates on a weekly cycle. This aligns with your income flow, allowing you to pause, upgrade, or downgrade your protection every Sunday at midnight.
-                </p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center text-brand-800 mb-4 text-lg font-serif">#</div>
-                <h3 className="font-serif text-2xl mb-3">Zone Classification</h3>
-                <p className="text-brand-800 text-sm leading-relaxed max-w-md">
-                  Zones aren't just about geography, they're about the environmental risk of your work. We analyze traffic density, weather dynamics, and seasonal data to classify regions into our three tiers.
-                </p>
-              </div>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal direction="left" delay={200}>
-            <div className="bg-brand-900 text-brand-50 rounded-3xl p-10 h-full flex flex-col justify-between min-h-[300px]">
-              <p className="font-serif text-2xl italic leading-relaxed text-white">
-                "The flexibility to pay only for the risk I face in Mumbai during monsoon was a game changer for my delivery business."
-              </p>
-              <div className="flex items-center gap-3 mt-8">
-                <div className="w-10 h-10 rounded-full bg-brand-700 text-white flex items-center justify-center font-serif text-lg">R</div>
-                <div>
-                  <p className="font-medium text-white text-sm">Rahul G.</p>
-                  <p className="text-brand-400 text-xs">Swiggy Rider, Mumbai</p>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        </section>
-
         {/* Dynamic Pricing Calculator Section */}
-        <section className="max-w-6xl mx-auto">
+        <section className="max-w-6xl mx-auto space-y-12">
           <ScrollReveal direction="up">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-serif mb-4">Calculate Your Dynamic Premium</h2>
-              <p className="text-brand-800 text-sm max-w-lg mx-auto">
-                Kizuna evaluates your unique risk profile using our AI engine. See how your identity, activity, and external risks impact your Trust Score and final weekly premium instantly.
+              <p className="text-brand-800 text-sm max-w-2xl mx-auto">
+                Kizuna doesn't believe in flat rates. Your protection costs are as unique as your work history. 
+                Use the tool below to see how your zone, trust score, and risk profile impact your weekly premium.
               </p>
             </div>
             <DynamicPricingCalculator />

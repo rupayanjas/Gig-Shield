@@ -6,7 +6,8 @@ import {
   Zap, CheckCircle2, CalendarDays, Shield, 
   MapPin, Activity, Clock, TrendingUp, BarChart, 
   AlertTriangle, Smartphone, Crosshair, HelpCircle, 
-  ChevronRight, Award, History, LineChart, Bell
+  ChevronRight, Award, History, LineChart, Bell,
+  Search, ShieldCheck, Check
 } from 'lucide-react';
 
 export default function Features() {
@@ -39,33 +40,21 @@ export default function Features() {
 
             {/* Feature Highlights */}
             <div className="flex flex-col gap-5 border-t border-brand-200 pt-6">
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
-                  <Zap size={15} className="text-brand-800" />
+              {[
+                { title: "Parametric triggers", desc: "Real-world events auto-detect income loss" },
+                { title: "Trust-based payouts", desc: "Better score = better coverage" },
+                { title: "Zone-aware protection", desc: "Only active where you actually work" }
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-4 group">
+                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                    <Check size={15} className="text-brand-800" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-0.5">{item.title}</p>
+                    <p className="text-sm text-brand-800">{item.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-0.5">Payout Speed</p>
-                  <p className="text-sm text-brand-800">Paid within 2 hours of disruption</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
-                  <Activity size={15} className="text-brand-800" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-0.5">Detection Reliability</p>
-                  <p className="text-sm text-brand-800">Accurate event detection using 3+ verified data sources</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center shrink-0 mt-0.5">
-                  <Shield size={15} className="text-brand-800" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-brand-400 mb-0.5">Security</p>
-                  <p className="text-sm text-brand-800">End-to-end encrypted &amp; ISO-standard compliant</p>
-                </div>
-              </div>
+              ))}
             </div>
 
           </ScrollReveal>
@@ -152,20 +141,20 @@ export default function Features() {
                    <div className="h-full bg-brand-900 w-1/3 rounded-full"></div>
                 </div>
                 {/* Steps */}
-                <div className="relative z-10 flex flex-col items-center gap-2">
+                <div className="relative z-10 flex flex-col items-center gap-2 text-center">
                   <div className="w-12 h-12 rounded-full bg-white border-4 border-brand-900 flex items-center justify-center font-bold font-serif text-brand-900 shadow-sm">1</div>
-                  <span className="text-xs font-medium uppercase tracking-wider text-brand-900">Detected</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-900">Trigger Detected</span>
                 </div>
-                <div className="relative z-10 flex flex-col items-center gap-2">
+                <div className="relative z-10 flex flex-col items-center gap-2 text-center">
                   <div className="w-12 h-12 rounded-full bg-brand-100 border-4 border-white flex items-center justify-center font-bold font-serif text-brand-400 shadow-sm">2</div>
-                  <span className="text-xs font-medium uppercase tracking-wider text-brand-400">Validated</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-400">Claim Auto-Created</span>
                 </div>
-                <div className="relative z-10 flex flex-col items-center gap-2">
+                <div className="relative z-10 flex flex-col items-center gap-2 text-center">
                   <div className="w-12 h-12 rounded-full bg-brand-100 border-4 border-white flex items-center justify-center font-bold font-serif text-brand-400 shadow-sm">3</div>
-                  <span className="text-xs font-medium uppercase tracking-wider text-brand-400">Paid Out</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-400">Payout Released</span>
                   {/* Floating tooltip */}
                   <div className="absolute -top-12 bg-brand-900 text-white text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-md">
-                    2-Hour Payout
+                    Instant Transfer
                     <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-brand-900 rotate-45"></div>
                   </div>
                 </div>
@@ -177,28 +166,28 @@ export default function Features() {
             <ScrollReveal direction="up" delay={300}>
               <Card className="shadow-none border border-brand-200 hover:shadow-premium transition-shadow h-full">
                 <div className="w-10 h-10 bg-accent-light text-[#E6A889] rounded-xl flex items-center justify-center mb-6">
-                  <CheckCircle2 size={20} />
+                  <Search size={20} />
                 </div>
-                <h3 className="font-serif text-xl text-brand-900 mb-2">Automated claim deduction</h3>
-                <p className="text-sm text-brand-800 leading-relaxed">Kizuna connects to your platform to detect issues via public supply/demand APIs and alerts.</p>
+                <h3 className="font-serif text-xl text-brand-900 mb-2">Parametric Claim Detection</h3>
+                <p className="text-sm text-brand-800 leading-relaxed">Claims are automatically triggered when real-world disruptions are detected via APIs.</p>
               </Card>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={400}>
               <Card className="bg-brand-900 text-brand-50 shadow-premium h-full">
                 <div className="w-10 h-10 bg-brand-800 text-brand-200 rounded-xl flex items-center justify-center mb-6">
-                  <Zap size={20} />
+                  <ShieldCheck size={20} />
                 </div>
-                <h3 className="font-serif text-xl mb-2">Instant UPI payout</h3>
-                <p className="text-sm text-brand-200 leading-relaxed">Funds hit your bank account within 2 hours under our advanced framing method's safe buffer protocol.</p>
+                <h3 className="font-serif text-xl mb-2">Trust-Based Payout Engine</h3>
+                <p className="text-sm text-brand-200 leading-relaxed">Your payout is calculated using your earnings profile and trust score.</p>
               </Card>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={500}>
               <Card className="shadow-none border border-brand-200 hover:shadow-premium transition-shadow h-full">
                 <div className="w-10 h-10 bg-brand-100 text-brand-800 rounded-xl flex items-center justify-center mb-6">
-                  <CalendarDays size={20} />
+                  <Zap size={20} />
                 </div>
-                <h3 className="font-serif text-xl text-brand-900 mb-2">Zero manual effort</h3>
-                <p className="text-sm text-brand-800 leading-relaxed">No paperwork, no support tickets. Our fully automated system handles everything from detection to payout.</p>
+                <h3 className="font-serif text-xl text-brand-900 mb-2">Zero-Touch Claims</h3>
+                <p className="text-sm text-brand-800 leading-relaxed">No forms, no delays — claims are triggered and processed automatically.</p>
               </Card>
             </ScrollReveal>
           </div>
@@ -215,8 +204,8 @@ export default function Features() {
                 Your income pattern is <span className="italic">unique.</span><br/>
                 Your protection should be too.
               </h2>
-              <p className="text-brand-800">
-                Kizuna's business framework ML models your specific shift routines and acts exactly as they differ across the gig ecosystem — past your data allowance limits.
+              <p className="text-brand-800 text-sm leading-relaxed mb-8">
+                Kizuna builds a personalized earning fingerprint using your work patterns, peak hours, and zone demand — ensuring fair payouts for every disruption.
               </p>
             </ScrollReveal>
             
@@ -252,23 +241,32 @@ export default function Features() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-brand-200 pt-10">
             <ScrollReveal direction="up" delay={200}>
               <div className="flex flex-col">
-                <Shield className="text-brand-800 mb-4" size={24} />
-                <h4 className="font-serif text-brand-900 text-lg mb-2">Personalized baseline</h4>
-                <p className="text-sm text-brand-800">We analyze your historical data to create a custom income floor that accurately reflects your true earnings.</p>
+                <div className="inline-flex items-center gap-2 mb-4">
+                  <Shield className="text-brand-800" size={20} />
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-400">99.4% Match</span>
+                </div>
+                <h4 className="font-serif text-brand-900 text-lg mb-2">Earnings fingerprint</h4>
+                <p className="text-sm text-brand-800 leading-relaxed">We analyze your historical data to create a custom income floor that accurately reflects your true earnings.</p>
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={300}>
               <div className="flex flex-col">
-                <History className="text-brand-800 mb-4" size={24} />
-                <h4 className="font-serif text-brand-900 text-lg mb-2">14–90 day analysis</h4>
-                <p className="text-sm text-brand-800">Our ML models look at comprehensive histories to account for seasonality, holidays, and temporary dips.</p>
+                <div className="inline-flex items-center gap-2 mb-4">
+                  <History className="text-brand-800" size={20} />
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-400">&lt; 2ms Process</span>
+                </div>
+                <h4 className="font-serif text-brand-900 text-lg mb-2">Recency-weighted earning model</h4>
+                <p className="text-sm text-brand-800 leading-relaxed">Our ML models look at comprehensive histories to account for seasonality, holidays, and temporary dips.</p>
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={400}>
               <div className="flex flex-col">
-                <Clock className="text-brand-800 mb-4" size={24} />
-                <h4 className="font-serif text-brand-900 text-lg mb-2">Time & zone analysis</h4>
-                <p className="text-sm text-brand-800">Your protection adapts based on the times and zones you typically work, providing targeted coverage.</p>
+                <div className="inline-flex items-center gap-2 mb-4">
+                  <Clock className="text-brand-800" size={20} />
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-400">Verified</span>
+                </div>
+                <h4 className="font-serif text-brand-900 text-lg mb-2">Zone + shift-based risk profiling</h4>
+                <p className="text-sm text-brand-800 leading-relaxed">Your protection adapts based on the times and zones you typically work, providing targeted coverage.</p>
               </div>
             </ScrollReveal>
           </div>
@@ -326,21 +324,21 @@ export default function Features() {
                   <div className="mt-1 bg-brand-200 text-brand-900 rounded-full p-1"><CheckCircle2 size={16} /></div>
                   <div>
                     <h4 className="font-bold text-brand-900">Zone-level disruption detection</h4>
-                    <p className="text-sm text-brand-800">Only pay for coverage when bad weather or low demand hits your specific operational area, not the whole city.</p>
+                    <p className="text-sm text-brand-800 leading-relaxed">Only pay for coverage when bad weather or low demand hits your specific operational area, not the whole city.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 rounded-2xl bg-brand-50 border border-transparent hover:border-brand-200 transition-colors">
                   <div className="mt-1 bg-brand-200 text-brand-900 rounded-full p-1"><CheckCircle2 size={16} /></div>
                   <div>
                     <h4 className="font-bold text-brand-900">GPS-based validation</h4>
-                    <p className="text-sm text-brand-800">Automated tracking ensures you get paid simply by being in the affected zone during the event window.</p>
+                    <p className="text-sm text-brand-800 leading-relaxed">Automated tracking ensures you get paid simply by being in the affected zone during the event window.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 rounded-2xl bg-brand-50 border border-transparent hover:border-brand-200 transition-colors">
                   <div className="mt-1 bg-brand-200 text-brand-900 rounded-full p-1"><CheckCircle2 size={16} /></div>
                   <div>
                     <h4 className="font-bold text-brand-900">Rider-specific activation</h4>
-                    <p className="text-sm text-brand-800">Your protection turns on automatically based on your individual working patterns and movement.</p>
+                    <p className="text-sm text-brand-800 leading-relaxed">Your protection turns on automatically based on your individual working patterns and movement.</p>
                   </div>
                 </div>
               </div>
@@ -369,8 +367,8 @@ export default function Features() {
                     <Smartphone size={20} />
                   </div>
                   <div>
-                    <h4 className="font-serif text-xl text-brand-900 mb-1">Multi-signal verification</h4>
-                    <p className="text-sm text-brand-800">Cross-referencing GPS, device telemetry, and network signals to confirm true work status.</p>
+                    <h4 className="font-serif text-xl text-brand-900 mb-1">Identity Verification (e-Shram + UAN)</h4>
+                    <p className="text-sm text-brand-800 leading-relaxed">Government-backed identity ensures only real workers are insured.</p>
                   </div>
                 </Card>
               </ScrollReveal>
@@ -381,8 +379,8 @@ export default function Features() {
                     <Activity size={20} />
                   </div>
                   <div>
-                    <h4 className="font-serif text-xl text-brand-900 mb-1">Behavior-based detection</h4>
-                    <p className="text-sm text-brand-800">Our ML identifies artificial patterns that differ from typical organic delivery operations.</p>
+                    <h4 className="font-serif text-xl text-brand-900 mb-1">Trust Score Engine</h4>
+                    <p className="text-sm text-brand-800 leading-relaxed">Your behavior, activity, and rating determine your protection level.</p>
                   </div>
                 </Card>
               </ScrollReveal>
@@ -393,8 +391,8 @@ export default function Features() {
                     <AlertTriangle size={20} />
                   </div>
                   <div>
-                    <h4 className="font-serif text-xl text-white mb-1">Soft warning system</h4>
-                    <p className="text-sm text-brand-200">First-time anomalies trigger educational nudges before any restrictive action is taken.</p>
+                    <h4 className="font-serif text-xl text-white mb-1">Fraud Penalty System</h4>
+                    <p className="text-sm text-brand-200 leading-relaxed">Suspicious activity reduces trust score and restricts benefits.</p>
                   </div>
                 </Card>
               </ScrollReveal>
@@ -475,7 +473,7 @@ export default function Features() {
                     <AlertTriangle className="text-[#D86D3B] shrink-0 mt-0.5" size={20} />
                     <div>
                       <h5 className="font-bold text-brand-900 text-sm mb-1">High Rain Probability</h5>
-                      <p className="text-xs text-brand-800">Anticipate possible drop in daily demand between 2 PM and 5 PM today.</p>
+                      <p className="text-xs text-brand-800 leading-relaxed">Anticipate possible drop in daily demand between 2 PM and 5 PM today.</p>
                       <div className="mt-3 inline-block bg-white border border-[#E6A889]/30 text-xs font-bold px-3 py-1 rounded-full text-brand-900">
                         Map Impact Zone
                       </div>
@@ -485,8 +483,8 @@ export default function Features() {
                   {/* Payout Preview */}
                   <div className="bg-brand-900 text-white rounded-xl p-6 relative overflow-hidden">
                     <div className="relative z-10">
-                      <p className="text-xs text-brand-200 mb-1 uppercase tracking-widest">Expected Payout Impact</p>
-                      <p className="font-serif text-4xl">₹142.50 <span className="text-sm font-sans text-brand-200 font-normal">potential cover</span></p>
+                      <p className="text-xs text-brand-200 mb-1 uppercase tracking-widest leading-relaxed">Expected Payout Impact</p>
+                      <p className="font-serif text-4xl leading-tight">₹142.50 <span className="text-sm font-sans text-brand-200 font-normal">potential cover</span></p>
                     </div>
                     {/* decorative background element */}
                     <div className="absolute right-0 top-0 h-full w-1/2 opacity-20 bg-gradient-to-l from-white to-transparent pointer-events-none mix-blend-overlay"></div>
@@ -502,24 +500,25 @@ export default function Features() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
             <ScrollReveal direction="right" className="order-2 lg:order-1">
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-brand-200 relative">
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-brand-200 relative shadow-premium">
                 <img 
-                  src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Gig worker reviewing metrics" 
+                  src="/rider-coffee-break.png" 
+                  alt="Gig worker with smartphone and coffee" 
                   className="w-full h-full object-cover"
                 />
                 
                 {/* Floating Element */}
                 <div className="absolute bottom-6 left-6 right-6 bg-white p-4 rounded-xl shadow-lg border border-brand-100 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#E6A889]/20 text-[#D86D3B] flex items-center justify-center">
-                      <Award size={20} />
+                    <div className="w-10 h-10 rounded-full bg-brand-900 text-white flex items-center justify-center">
+                      <ShieldCheck size={20} />
                     </div>
                     <div>
-                      <p className="text-xs text-brand-500 font-bold uppercase">Pro Tier Status</p>
-                      <p className="text-sm font-medium text-brand-900">4% expanded coverage activated</p>
+                      <p className="text-[10px] text-brand-400 font-bold uppercase tracking-widest">Active Protection</p>
+                      <p className="text-sm font-serif text-brand-900">Trust Score: 88/100</p>
                     </div>
                   </div>
+                  <div className="text-green-600 font-bold text-xs">+12% Bonus</div>
                 </div>
               </div>
             </ScrollReveal>
@@ -538,89 +537,30 @@ export default function Features() {
               
               <div className="space-y-6">
                 <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-brand-900 text-white flex items-center justify-center shrink-0">1</div>
+                  <div className="w-8 h-8 rounded-full bg-brand-900 text-white flex items-center justify-center shrink-0 font-bold">1</div>
                   <div>
-                    <h4 className="font-serif text-xl font-medium text-brand-900 mb-1">Tier-based protection system</h4>
-                    <p className="text-sm text-brand-800">Unlock Bronze, Silver, and Gold status tiers automatically based on your rolling 30-day delivery volume.</p>
+                    <h4 className="font-serif text-xl font-medium text-brand-900 mb-1">Trust Score Growth</h4>
+                    <p className="text-sm text-brand-800 leading-relaxed">More activity increases your trust score, reflecting your consistency and reliability.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-brand-900 text-white flex items-center justify-center shrink-0">2</div>
+                  <div className="w-8 h-8 rounded-full bg-brand-900 text-white flex items-center justify-center shrink-0 font-bold">2</div>
                   <div>
-                    <h4 className="font-serif text-xl font-medium text-brand-900 mb-1">Higher activity = Higher benefits</h4>
-                    <p className="text-sm text-brand-800">Your maximum coverage limit scales proportionally with your work hours, providing more robust protection when you need it.</p>
+                    <h4 className="font-serif text-xl font-medium text-brand-900 mb-1">Higher Trust = Better Benefits</h4>
+                    <p className="text-sm text-brand-800 leading-relaxed">Higher trust unlocks lower premiums and better payouts through our optimized risk engine.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-[#E6A889] text-brand-900 flex items-center justify-center shrink-0">3</div>
+                  <div className="w-8 h-8 rounded-full bg-brand-900 text-white flex items-center justify-center shrink-0 font-bold">3</div>
                   <div>
-                    <h4 className="font-serif text-xl font-medium text-brand-900 mb-1">Consistency rewards</h4>
-                    <p className="text-sm text-brand-800">Maintain steady activity patterns to decrease your claim deductibles and unlock special one-time bonuses.</p>
+                    <h4 className="font-serif text-xl font-medium text-brand-900 mb-1">Consistency Rewards</h4>
+                    <p className="text-sm text-brand-800 leading-relaxed">Consistent work patterns improve your coverage terms and provide recurring efficiency bonuses.</p>
                   </div>
                 </div>
               </div>
             </ScrollReveal>
             
           </div>
-        </section>
-
-        {/* 8. Journey Timeline */}
-        <section className="max-w-4xl mx-auto text-center py-10">
-          <ScrollReveal direction="up">
-            <h2 className="text-3xl font-serif text-brand-900 mb-2">Your Protection Journey</h2>
-            <p className="text-brand-800 mb-16">Securing fast, custom fit for your conditions</p>
-            
-            <div className="relative">
-              {/* Line */}
-              <div className="absolute top-4 left-0 w-full h-1 bg-brand-200 -z-10 rounded">
-                <div className="h-full bg-brand-900 w-3/4 rounded relative">
-                   <div className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-brand-900 text-white text-[10px] font-bold px-2 py-1 rounded">GUARANTEED</div>
-                </div>
-              </div>
-              
-              <div className="flex justify-between relative">
-                <div className="flex flex-col items-center">
-                  <div className="w-3 h-3 bg-brand-900 rounded-full mb-3 ring-4 ring-white"></div>
-                  <span className="text-xs font-bold uppercase text-brand-900">Verified</span>
-                  <span className="text-[10px] text-brand-400">0 MIN</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-3 h-3 bg-brand-900 rounded-full mb-3 ring-4 ring-white"></div>
-                  <span className="text-xs font-bold uppercase text-brand-900">At Risk</span>
-                  <span className="text-[10px] text-brand-400">15 MIN</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-3 h-3 bg-brand-900 rounded-full mb-3 ring-4 ring-white"></div>
-                  <span className="text-xs font-bold uppercase text-brand-900">Payout Initiated</span>
-                  <span className="text-[10px] text-brand-400">20 MIN</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-3 h-3 bg-white border-2 border-brand-200 rounded-full mb-3"></div>
-                  <span className="text-xs font-bold uppercase text-brand-400">Paid</span>
-                  <span className="text-[10px] text-brand-400">1-2 HRS</span>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        {/* 9. Final CTA */}
-        <section className="bg-brand-900 text-brand-50 rounded-[3rem] p-12 md:p-24 text-center max-w-5xl mx-auto shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#E6A889]/10 rounded-full blur-3xl mix-blend-overlay"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl mix-blend-overlay"></div>
-          
-          <ScrollReveal direction="up" className="relative z-10">
-            <h2 className="text-4xl md:text-6xl font-serif mb-6 leading-tight">
-              Ready to secure your future?
-            </h2>
-            <p className="text-brand-200 max-w-2xl mx-auto mb-10 text-lg">
-              Join 10,000+ gig professionals who've stopped their earnings from tying to the uncontrollable events against our seamless app.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button className="bg-white text-brand-900 hover:bg-brand-50">Get Started Today</Button>
-              <Button variant="outline" className="border-brand-500 text-brand-50 hover:bg-brand-800">Book Demo Quickly</Button>
-            </div>
-          </ScrollReveal>
         </section>
 
       </main>

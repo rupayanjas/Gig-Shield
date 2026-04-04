@@ -1,158 +1,155 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from './ui';
-import { UserCheck, AlertTriangle } from 'lucide-react';
+import { Shield, AlertTriangle, Activity, Info } from 'lucide-react';
+
+const zoneRisks = [
+  { level: 'Low', base: 35, color: 'bg-green-100 text-green-700' },
+  { level: 'Medium', base: 55, color: 'bg-yellow-100 text-yellow-700' },
+  { level: 'High', base: 85, color: 'bg-red-100 text-red-700' },
+];
+
+const disruptionLevels = [
+  { level: 'Low', multiplier: 1.0 },
+  { level: 'Moderate', multiplier: 1.15 },
+  { level: 'High', multiplier: 1.3 },
+];
 
 export default function DynamicPricingCalculator() {
-  const [eShram, setEShram] = useState(true);
-  const [rating, setRating] = useState(4.5);
-  const [activity, setActivity] = useState(80); // 0-100
-  const [fraud, setFraud] = useState(0); // 0-5
-  const [zone, setZone] = useState('Medium'); // Low, Medium, High
-  const [disruptions, setDisruptions] = useState('Moderate'); // Low, Moderate, High
+  const [zone, setZone] = useState(zoneRisks[1]);
+  const [trustScore, setTrustScore] = useState(75);
+  const [disruption, setDisruption] = useState(disruptionLevels[1]);
+  const [premium, setPremium] = useState(0);
 
-  // Derived calculations based on Kizuna Phase 1 README logic
-  const I = eShram ? 100 : 0;
-  const R = rating * 20;
-  const A = activity;
-  const F = fraud;
-  
-  const rawTS = 50 + 0.20 * I + 0.30 * R + 0.30 * A - 30 * F;
-  const TS = Math.max(0, Math.min(100, Math.round(rawTS)));
-
-  let basePremium = 34; // Low
-  if (zone === 'Medium') basePremium = 55;
-  if (zone === 'High') basePremium = 87;
-
-  let disruptionMult = 1.0;
-  if (disruptions === 'Moderate') disruptionMult = 1.15;
-  if (disruptions === 'High') disruptionMult = 1.30;
-
-  // Let's use TS as a multiplier modifier.
-  // E.g. TS=100 -> 0.75, TS=50 -> 1.25, TS=0 -> 1.75
-  const tsMult = Math.max(0.7, 1 + (75 - TS) / 100);
-  
-  const finalPremium = Math.max(19, Math.round(basePremium * disruptionMult * tsMult));
-
-  const tsColor = TS >= 75 ? 'text-green-600' : TS >= 40 ? 'text-yellow-600' : 'text-red-500';
-  const tsBg = TS >= 75 ? 'bg-green-100' : TS >= 40 ? 'bg-yellow-100' : 'bg-red-100';
+  useEffect(() => {
+    // Logic: 
+    // Trust Multiplier: 70 is neutral. 100 gives ~25% discount. 0 gives ~70% penalty.
+    const trustMultiplier = 1 + ((70 - trustScore) / 100);
+    
+    // Final Calculation
+    const calculated = zone.base * trustMultiplier * disruption.multiplier;
+    setPremium(Math.round(calculated));
+  }, [zone, trustScore, disruption]);
 
   return (
-    <Card className="p-8 max-w-5xl mx-auto border-brand-200 shadow-premium overflow-hidden">
-      <div className="flex flex-col lg:flex-row gap-12">
-        {/* Settings Side */}
-        <div className="flex-1 space-y-8">
-          <div>
-            <h3 className="text-2xl font-serif text-brand-900 mb-6 border-b border-brand-100 pb-2">1. Dynamic Trust Variables</h3>
-            <div className="space-y-6">
-              {/* eShram */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <UserCheck size={16} className="text-brand-600" />
-                    <span className="font-bold text-xs uppercase tracking-widest text-brand-800">e-Shram Verified</span>
-                  </div>
-                  <p className="text-[10px] text-brand-500">Government ID linkage (+20% identity score)</p>
-                </div>
-                <button 
-                  onClick={() => setEShram(!eShram)}
-                  className={`w-12 h-6 rounded-full flex items-center p-1 transition-colors ${eShram ? 'bg-brand-800' : 'bg-brand-200'}`}
-                >
-                  <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${eShram ? 'translate-x-6' : ''}`}></div>
-                </button>
-              </div>
+    <Card className="w-full max-w-2xl mx-auto border border-brand-200 shadow-premium p-8 bg-white overflow-hidden relative">
+      {/* Decorative background logo */}
+      <div className="absolute -right-10 -bottom-10 text-brand-50 opacity-20 pointer-events-none">
+        <Shield size={200} />
+      </div>
 
-              {/* Rating */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-xs uppercase tracking-widest text-brand-800">Platform Rating</span>
-                  <span className="text-xs font-medium text-brand-900 bg-brand-50 px-2 py-0.5 rounded">{rating.toFixed(1)} / 5.0</span>
-                </div>
-                <input type="range" min="1.0" max="5.0" step="0.1" value={rating} onChange={(e)=>setRating(parseFloat(e.target.value))} className="w-full accent-brand-800" />
-              </div>
-
-              {/* Activity */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-xs uppercase tracking-widest text-brand-800">Recency & Activity</span>
-                  <span className="text-xs font-medium text-brand-900 bg-brand-50 px-2 py-0.5 rounded">{activity}% Score</span>
-                </div>
-                <input type="range" min="0" max="100" step="5" value={activity} onChange={(e)=>setActivity(Number(e.target.value))} className="w-full accent-brand-800" />
-              </div>
-
-              {/* Fraud */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle size={16} className="text-red-500" />
-                    <span className="font-bold text-xs uppercase tracking-widest text-brand-800">Fraud Flags</span>
-                  </div>
-                  <span className="text-xs font-medium text-brand-900 bg-red-50 text-red-700 px-2 py-0.5 rounded">{fraud} Events</span>
-                </div>
-                <input type="range" min="0" max="5" step="1" value={fraud} onChange={(e)=>setFraud(Number(e.target.value))} className="w-full accent-red-600" />
-              </div>
-            </div>
+      <div className="relative z-10">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-10 h-10 rounded-xl bg-brand-900 flex items-center justify-center text-white">
+            <Activity size={20} />
           </div>
-          
           <div>
-            <h3 className="text-2xl font-serif text-brand-900 mb-6 border-b border-brand-100 pb-2">2. Environmental Risk</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="font-bold text-[10px] uppercase tracking-widest text-brand-800 block mb-2">Zone Risk</label>
-                <select value={zone} onChange={(e)=>setZone(e.target.value)} className="w-full bg-brand-50 border border-brand-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-800">
-                  <option value="Low">Low (e.g. Jaipur)</option>
-                  <option value="Medium">Medium (e.g. Bengaluru)</option>
-                  <option value="High">High (e.g. Delhi Monsoon)</option>
-                </select>
-              </div>
-              <div>
-                <label className="font-bold text-[10px] uppercase tracking-widest text-brand-800 block mb-2">Hist. Disruptions</label>
-                <select value={disruptions} onChange={(e)=>setDisruptions(e.target.value)} className="w-full bg-brand-50 border border-brand-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-800">
-                  <option value="Low">Low (&lt;1 /mo)</option>
-                  <option value="Moderate">Moderate (2-3 /mo)</option>
-                  <option value="High">High (&gt;4 /mo)</option>
-                </select>
-              </div>
-            </div>
+            <h3 className="font-serif text-2xl text-brand-900">Premium Estimator</h3>
+            <p className="text-xs text-brand-400 uppercase tracking-widest font-bold">Real-time Dynamic Pricing</p>
           </div>
         </div>
 
-        {/* Display Side */}
-        <div className="flex-1 flex flex-col justify-center items-center bg-brand-900 text-brand-50 rounded-3xl p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-800 hover:bg-brand-700 transition-colors duration-1000 rounded-full blur-[80px] opacity-70 -translate-y-1/2 translate-x-1/2"></div>
-          
-          <div className="w-full relative z-10 flex flex-col h-full justify-center">
-            
-            <div className="bg-white/10 rounded-2xl p-6 mb-12 backdrop-blur-md border border-white/10">
-              <div className="flex justify-between items-center mb-3">
-                <span className="font-serif text-xl">Kizuna Trust Score</span>
-                <div className={`px-3 py-1 rounded-full text-xs font-bold ${tsBg} ${tsColor} shadow-inner`}>
-                  {TS}
-                </div>
-              </div>
-              <div className="w-full h-1.5 bg-brand-900/50 rounded-full overflow-hidden">
-                <div className={`h-full ${TS >= 75 ? 'bg-green-400' : TS >= 40 ? 'bg-yellow-400' : 'bg-red-400'} transition-all duration-500`} style={{width: `${TS}%`}}></div>
-              </div>
-              <p className="text-[10px] text-brand-200 mt-3 text-center opacity-80 uppercase tracking-widest">TS = 50 + 0.20 I + 0.30 R + 0.30 A - 30 F</p>
+        <div className="space-y-8">
+          {/* Zone Selection */}
+          <div className="space-y-3">
+            <label className="text-sm font-bold text-brand-800 flex items-center gap-2">
+              <MapPinIcon size={14} /> 1. Select Operating Zone
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {zoneRisks.map((z) => (
+                <button
+                  key={z.level}
+                  onClick={() => setZone(z)}
+                  className={`py-3 px-4 rounded-xl text-sm font-medium transition-all border ${
+                    zone.level === z.level 
+                      ? 'bg-brand-900 text-white border-brand-900 shadow-md' 
+                      : 'bg-brand-50 text-brand-600 border-transparent hover:border-brand-200'
+                  }`}
+                >
+                  {z.level}
+                </button>
+              ))}
             </div>
+          </div>
 
-            <div className="text-center bg-brand-900/50 p-6 rounded-2xl border border-brand-800/50 backdrop-blur-sm shadow-xl">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#E0D5C1] block mb-2">Live Premium Output</span>
-              <div className="flex items-baseline justify-center gap-1">
-                <span className="text-7xl font-serif tracking-tight">₹{finalPremium}</span>
-                <span className="text-brand-300 font-medium">/wk</span>
-              </div>
-              
-              <div className="mt-8 flex flex-wrap justify-center gap-2">
-                {zone === 'High' && <span className="text-[10px] bg-red-900/40 text-red-300 border border-red-800/50 px-2.5 py-1 rounded-full whitespace-nowrap">High Risk Zone</span>}
-                {TS >= 85 && <span className="text-[10px] bg-green-900/40 text-green-300 border border-green-800/50 px-2.5 py-1 rounded-full whitespace-nowrap">Trust Discount Applied</span>}
-                {F > 0 && <span className="text-[10px] bg-red-900/40 text-red-300 border border-red-800/50 px-2.5 py-1 rounded-full whitespace-nowrap">Fraud Penalty</span>}
-                {TS < 40 && F === 0 && <span className="text-[10px] bg-yellow-900/40 text-yellow-300 border border-yellow-800/50 px-2.5 py-1 rounded-full whitespace-nowrap">Low Trust Loading</span>}
+          {/* Trust Score Slider */}
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-bold text-brand-800 flex items-center gap-2">
+                <Shield size={14} /> 2. Trust Score
+              </label>
+              <span className={`text-xs font-bold px-2 py-1 rounded-full ${
+                trustScore >= 80 ? 'bg-green-100 text-green-700' : 
+                trustScore >= 50 ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'
+              }`}>
+                {trustScore}/100
+              </span>
+            </div>
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              value={trustScore} 
+              onChange={(e) => setTrustScore(parseInt(e.target.value))}
+              className="w-full h-2 bg-brand-100 rounded-lg appearance-none cursor-pointer accent-brand-900"
+            />
+            <p className="text-[10px] text-brand-400 italic">High scores (80+) unlock significant premium discounts.</p>
+          </div>
+
+          {/* Disruption Frequency */}
+          <div className="space-y-3">
+            <label className="text-sm font-bold text-brand-800 flex items-center gap-2">
+              <AlertTriangle size={14} /> 3. Historical Disruption Frequency
+            </label>
+            <div className="flex gap-4">
+              {disruptionLevels.map((d) => (
+                <label key={d.level} className="flex items-center gap-2 cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="disruption" 
+                    checked={disruption.level === d.level}
+                    onChange={() => setDisruption(d)}
+                    className="w-4 h-4 text-brand-900 border-brand-300 focus:ring-brand-900"
+                  />
+                  <span className={`text-sm ${disruption.level === d.level ? 'text-brand-900 font-bold' : 'text-brand-500 group-hover:text-brand-700'}`}>
+                    {d.level}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Results Area */}
+          <div className="pt-8 border-t border-brand-100 mt-4 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <p className="text-xs text-brand-400 uppercase tracking-widest font-bold mb-1">Your Estimated Premium</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-serif text-brand-900">₹{premium}</span>
+                <span className="text-brand-500 font-medium">/week</span>
               </div>
             </div>
+            <button className="bg-brand-900 text-white px-8 py-4 rounded-2xl font-bold hover:bg-brand-800 transition-all shadow-lg active:scale-95">
+              Secure Protection
+            </button>
+          </div>
 
+          <div className="flex items-start gap-2 p-3 bg-brand-50 rounded-xl">
+            <span className="text-brand-400 shrink-0 mt-1">
+                <Info size={14} />
+            </span>
+            <p className="text-[10px] text-brand-600 leading-relaxed">
+              *This is an estimate based on current risk factors. Premiums are finalized every Sunday at 12:00 AM based on live data snapshots of your Trust Score and upcoming zone forecasts.
+            </p>
           </div>
         </div>
       </div>
     </Card>
+  );
+}
+
+function MapPinIcon({ size }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+    </svg>
   );
 }
