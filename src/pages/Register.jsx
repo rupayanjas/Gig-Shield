@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { register } from '../lib/auth';
+import { MOCK_USER } from '../lib/auth';
 import { Button, Card } from '../components/ui';
 import { CheckCircle2, AlertTriangle, Shield, ChevronRight, Activity, ArrowRight, User, Smartphone, Hash, MapPin, Loader2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { cn } from '../components/ui';
+import { createUser, getUserByPhone } from '../lib/api';
+
+const SESSION_TOKEN_KEY = 'kizuna_session_token';
+const CURRENT_USER_KEY = 'kizuna_current_user';
 
 export default function Register() {
   const [step, setStep] = useState(1);
@@ -83,33 +87,76 @@ export default function Register() {
     setStep(4);
   };
 
-  const handleFinalSubmit = (tier) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFinalSubmit = async (tier) => {
     const baseP = calculateBasePremium(currentCity);
     const finalPremium = Math.round(baseP * (tier.payout / 25));
+    setIsSubmitting(true);
 
-    const profileData = {
-      name: name,
-      phone: phone,
-      platform: platform,
-      partnerId: partnerId,
-      zone: currentCity ? currentCity.name : 'Unknown',
-      trustScore: trustScore,
-      eShramVerified: isEShramVerified,
-      zoneRisk: currentCity ? currentCity.risk.toUpperCase() : 'MEDIUM',
-      premium: {
-        amount: finalPremium,
-        frequency: 'week',
-        reason: `${currentCity?.name} (${currentCity?.risk}) based on Trust Score ${trustScore}`
-      },
-      coverageTier: {
-        name: tier.name,
-        icon: tier.icon,
-        hours: tier.payout * 4
+    try {
+      // Build the payload to send to backend
+      const payload = {
+        phone,
+        partnerId,
+        city: currentCity ? currentCity.name : 'Mumbai',
+        successfulDays: 0,
+        cancellationRate: 0,
+        claimsMade: 0,
+        claimsApproved: 0,
+      };
+
+      let backendUser = null;
+      const createResult = await createUser(payload);
+
+      if (createResult.success) {
+        backendUser = createResult.data;
+      } else if (createResult.message?.includes('already exists')) {
+        // User already registered → fetch them
+        const fetchResult = await getUserByPhone(phone);
+        if (fetchResult.success) backendUser = fetchResult.data;
       }
-    };
 
-    register(phone, profileData);
-    navigate('/dashboard');
+      // Build full local profile merging the backend data with UI-only fields
+      const profileData = {
+        ...MOCK_USER,
+        ...(backendUser || {}),
+        name,
+        phone,
+        platform,
+        partnerId,
+        zone: currentCity ? currentCity.name : 'Unknown',
+        trustScore: backendUser?.trustScore ?? (isEShramVerified ? 85 : 65),
+        eShramVerified: isEShramVerified,
+        zoneRisk: currentCity ? currentCity.risk.toUpperCase() : 'MEDIUM',
+        premium: {
+          amount: finalPremium,
+          frequency: 'week',
+          reason: `${currentCity?.name} (${currentCity?.risk}) based on Trust Score`,
+        },
+        coverageTier: {
+          name: tier.name,
+          icon: tier.icon,
+          hours: tier.payout * 4,
+        },
+        id: backendUser?._id || `USR-${Math.floor(Math.random() * 9000) + 1000}`,
+      };
+
+      // Persist to localStorage & create session
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(profileData));
+      const token = btoa(`${phone}:${Date.now()}`);
+      sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Registration error:', err);
+      // Fallback: save locally and proceed (never block the user)
+      const token = btoa(`${phone}:${Date.now()}`);
+      sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+      navigate('/dashboard');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -408,8 +455,8 @@ export default function Register() {
               <div className="space-y-4">
                 <h3 className="text-center font-serif text-xl text-brand-900 pt-2">AI-Optimized Plans</h3>
                 {TIERS.map(tier => (
-                  <div key={tier.id} className="bg-white rounded-2xl p-5 border border-brand-100 flex shadow-sm gap-4 relative overflow-hidden items-center group hover:border-brand-800 transition-all cursor-pointer" onClick={() => handleFinalSubmit(tier)}>
-                    <div className="w-14 h-14 rounded-full bg-brand-50 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">{tier.icon}</div>
+                  <div key={tier.id} className="bg-white rounded-2xl p-5 border border-brand-100 flex shadow-sm gap-4 relative overflow-hidden items-center group hover:border-brand-800 transition-all cursor-pointer" onClick={() => !isSubmitting && handleFinalSubmit(tier)}>
+                    <div className="w-14 h-14 rounded-full bg-brand-50 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">{isSubmitting ? <Loader2 className="animate-spin text-brand-400" size={24} /> : tier.icon}</div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-bold text-lg text-brand-900">{tier.name}</h4>

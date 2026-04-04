@@ -1,19 +1,12 @@
+import { useState } from 'react';
 import { cn } from './ui';
-import { ShieldCheck, Zap, AlertCircle, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { ShieldCheck, Zap, AlertCircle, Clock, CheckCircle, XCircle, RefreshCw, Sparkles } from 'lucide-react';
+import { createTrigger } from '../lib/api';
 
 // --- Sub-components ---
 
-const SectionHeader = ({ title, subtitle }) => (
-  <div className="mb-6">
-    <h2 className="font-serif text-2xl text-brand-900">{title}</h2>
-    {subtitle && <p className="text-sm text-brand-500 mt-1">{subtitle}</p>}
-  </div>
-);
-
-// Trust Score Ring
 const TrustScoreRing = ({ score }) => {
-  const clr =
-    score >= 71 ? '#2e7d32' : score >= 40 ? '#f59e0b' : '#dc2626';
+  const clr = score >= 71 ? '#2e7d32' : score >= 40 ? '#f59e0b' : '#dc2626';
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
   const filled = (score / 100) * circumference;
@@ -33,14 +26,13 @@ const TrustScoreRing = ({ score }) => {
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-2xl font-bold text-brand-900" style={{ color: clr }}>{score}</span>
+        <span className="text-2xl font-bold" style={{ color: clr }}>{score}</span>
         <span className="text-[10px] font-medium text-brand-500 uppercase tracking-widest">/ 100</span>
       </div>
     </div>
   );
 };
 
-// Severity badge
 const SeverityBadge = ({ severity }) => {
   const colours = {
     high: 'bg-red-100 text-red-700 border-red-200',
@@ -54,7 +46,6 @@ const SeverityBadge = ({ severity }) => {
   );
 };
 
-// Claim status icon + badge
 const ClaimStatusBadge = ({ status }) => {
   const config = {
     approved: { icon: CheckCircle, cls: 'text-green-600 bg-green-50 border-green-200', label: 'Approved' },
@@ -72,7 +63,56 @@ const ClaimStatusBadge = ({ status }) => {
 
 // --- Main LiveDataPanel ---
 
-export default function LiveDataPanel({ liveUser, triggers, claims, loading, error }) {
+const TRIGGER_TYPES = ['rain', 'pollution', 'app_downtime', 'dark_store', 'incentive_break'];
+const SEVERITIES = ['low', 'medium', 'high'];
+const TRIGGER_ICONS = {
+  rain: '🌧️',
+  pollution: '🌫️',
+  app_downtime: '⚠️',
+  dark_store: '🏪',
+  incentive_break: '💸',
+};
+
+export default function LiveDataPanel({ liveUser, triggers, claims, loading, error, onRefresh }) {
+  const [simulating, setSimulating] = useState(false);
+  const [simMessage, setSimMessage] = useState(null);
+
+  const handleSimulate = async () => {
+    if (!liveUser) return;
+    setSimulating(true);
+    setSimMessage(null);
+
+    const randomType = TRIGGER_TYPES[Math.floor(Math.random() * TRIGGER_TYPES.length)];
+    const randomSeverity = SEVERITIES[Math.floor(Math.random() * SEVERITIES.length)];
+    const now = new Date();
+    const endTime = new Date(now.getTime() + 4 * 60 * 60 * 1000); // 4 hours from now
+
+    try {
+      const result = await createTrigger({
+        type: randomType,
+        city: liveUser.city,
+        severity: randomSeverity,
+        startTime: now.toISOString(),
+        endTime: endTime.toISOString(),
+      });
+
+      if (result.success) {
+        setSimMessage({ type: 'success', text: result.message });
+        // Refresh claims and triggers after 800ms to let DB settle
+        setTimeout(async () => {
+          if (onRefresh) await onRefresh();
+          setSimulating(false);
+        }, 800);
+      } else {
+        setSimMessage({ type: 'error', text: result.message || 'Trigger creation failed.' });
+        setSimulating(false);
+      }
+    } catch (err) {
+      setSimMessage({ type: 'error', text: 'Failed to simulate event. Check your connection.' });
+      setSimulating(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="rounded-3xl border border-brand-100 bg-white p-8 flex items-center justify-center gap-3 text-brand-500">
@@ -91,21 +131,46 @@ export default function LiveDataPanel({ liveUser, triggers, claims, loading, err
     );
   }
 
-  const TRIGGER_ICONS = {
-    rain: '🌧️',
-    pollution: '🌫️',
-    app_downtime: '⚠️',
-    dark_store: '🏪',
-    incentive_break: '💸',
-  };
-
   return (
-    <div className="space-y-8">
-      {/* Header Label */}
-      <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-900/5 rounded-full text-brand-700 text-[10px] font-bold uppercase tracking-widest">
-        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-        Live Backend Data
+    <div className="space-y-6">
+      {/* Header row */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-900/5 rounded-full text-brand-700 text-[10px] font-bold uppercase tracking-widest">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+          Live Backend Data
+        </div>
+
+        {/* Simulate Event Button */}
+        <button
+          onClick={handleSimulate}
+          disabled={simulating}
+          className={cn(
+            'inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border',
+            simulating
+              ? 'bg-brand-100 text-brand-400 border-brand-100 cursor-not-allowed'
+              : 'bg-brand-900 text-white border-brand-900 hover:bg-brand-800 shadow-sm hover:shadow-md active:scale-95'
+          )}
+        >
+          {simulating ? (
+            <><RefreshCw size={14} className="animate-spin" /> Simulating…</>
+          ) : (
+            <><Sparkles size={14} /> Simulate Event</>
+          )}
+        </button>
       </div>
+
+      {/* Simulation feedback */}
+      {simMessage && (
+        <div className={cn(
+          'rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2 border',
+          simMessage.type === 'success'
+            ? 'bg-green-50 text-green-700 border-green-200'
+            : 'bg-red-50 text-red-700 border-red-200'
+        )}>
+          {simMessage.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+          {simMessage.text}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -117,7 +182,7 @@ export default function LiveDataPanel({ liveUser, triggers, claims, loading, err
             <p className="font-serif text-lg text-brand-900">{liveUser.city}</p>
             <p className="text-xs text-brand-500">Partner ID: <span className="font-medium text-brand-700">{liveUser.partnerId}</span></p>
           </div>
-          <div className="mt-4 w-full bg-brand-50 rounded-xl p-3 text-left space-y-1 text-xs text-brand-700">
+          <div className="mt-4 w-full bg-brand-50 rounded-xl p-3 text-left space-y-1.5 text-xs text-brand-700">
             <div className="flex justify-between"><span>Successful Days</span><span className="font-bold">{liveUser.successfulDays}</span></div>
             <div className="flex justify-between"><span>Cancellation Rate</span><span className="font-bold">{(liveUser.cancellationRate * 100).toFixed(0)}%</span></div>
             <div className="flex justify-between"><span>Claims Approved</span><span className="font-bold">{liveUser.claimsApproved}/{liveUser.claimsMade}</span></div>
@@ -126,20 +191,20 @@ export default function LiveDataPanel({ liveUser, triggers, claims, loading, err
 
         {/* ── Card 2: Active Triggers ── */}
         <div className="bg-white rounded-2xl border border-brand-100 p-6 shadow-sm">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">Active Triggers</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">Active Triggers ({triggers.length})</span>
           {triggers.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-brand-400 gap-2">
               <ShieldCheck size={28} className="opacity-40" />
               <p className="text-xs">No active triggers right now</p>
             </div>
           ) : (
-            <div className="space-y-3">
-              {triggers.slice(0, 5).map(trigger => (
+            <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
+              {triggers.map(trigger => (
                 <div key={trigger._id} className="flex items-start gap-3 p-3 rounded-xl bg-brand-50 border border-brand-100">
                   <span className="text-lg">{TRIGGER_ICONS[trigger.type] || '⚡'}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold text-brand-900 capitalize">{trigger.type.replace('_', ' ')}</span>
+                      <span className="text-xs font-semibold text-brand-900 capitalize">{trigger.type.replace(/_/g, ' ')}</span>
                       <SeverityBadge severity={trigger.severity} />
                     </div>
                     <p className="text-[11px] text-brand-500">{trigger.city}</p>
@@ -152,20 +217,25 @@ export default function LiveDataPanel({ liveUser, triggers, claims, loading, err
 
         {/* ── Card 3: Claims ── */}
         <div className="bg-white rounded-2xl border border-brand-100 p-6 shadow-sm">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">My Claims</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">My Claims ({claims.length})</span>
           {claims.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-brand-400 gap-2">
               <Zap size={28} className="opacity-40" />
-              <p className="text-xs">No claims on file yet</p>
+              <p className="text-xs">No claims yet — simulate an event!</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
               {claims.map(claim => (
                 <div key={claim._id} className="p-3 rounded-xl bg-brand-50 border border-brand-100 space-y-2">
                   <div className="flex items-center justify-between">
                     <ClaimStatusBadge status={claim.status} />
-                    {claim.status === 'approved' && (
-                      <span className="text-xs font-bold text-green-700">+₹{claim.payoutAmount}</span>
+                    {claim.payoutAmount > 0 && (
+                      <span className={cn(
+                        'text-xs font-bold',
+                        claim.status === 'approved' ? 'text-green-700' : 'text-brand-400 line-through'
+                      )}>
+                        ₹{claim.payoutAmount}
+                      </span>
                     )}
                   </div>
                   <p className="text-[11px] text-brand-500">

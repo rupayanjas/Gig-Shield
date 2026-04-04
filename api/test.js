@@ -10,6 +10,16 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
+        const { phone } = req.query;
+        // If phone query param is provided, find a single user
+        if (phone) {
+          const user = await User.findOne({ phone });
+          if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+          }
+          return res.status(200).json({ success: true, data: user });
+        }
+        // Otherwise return all users
         const users = await User.find({}).sort({ createdAt: -1 });
         res.status(200).json({ success: true, count: users.length, data: users });
       } catch (error) {

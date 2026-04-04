@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../lib/auth';
+import { MOCK_USER } from '../lib/auth';
 import { Button, Card } from '../components/ui';
 import { Smartphone, ShieldCheck, Loader2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { ScrollReveal } from '../components/ScrollReveal';
+import { getUserByPhone, createUser } from '../lib/api';
+
+const SESSION_TOKEN_KEY = 'kizuna_session_token';
+const CURRENT_USER_KEY = 'kizuna_current_user';
 
 const Login = () => {
   const [step, setStep] = useState(1);
@@ -14,42 +18,60 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
-    
-    // In a real app, we'd trigger OTP service here
-    // For demo, we just check if user exists in our local database
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      // We still use our login helper to check existence (it doesn't actually check password for now)
-      const mockSuccess = login(phone, ''); 
-      if (mockSuccess) {
+
+    try {
+      // Try to find user in backend by phone
+      let result = await getUserByPhone(phone);
+      let backendUser = result.success ? result.data : null;
+
+      // If no user found → auto-create a minimal user (no blocking error)
+      if (!backendUser) {
+        const createResult = await createUser({
+          phone,
+          partnerId: `USR-${phone.slice(-4)}`,
+          city: 'Mumbai', // default city until user sets it
+          successfulDays: 0,
+          cancellationRate: 0,
+        });
+        backendUser = createResult.success ? createResult.data : null;
+      }
+
+      if (backendUser) {
+        // Merge backend data with the mock structure for full dashboard compat
+        const fullProfile = { ...MOCK_USER, ...backendUser, phone };
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(fullProfile));
+        // Proceed to OTP step
         setStep(2);
       } else {
-        setError('User not found. Please register to create an account.');
+        setError('Something went wrong. Please try again.');
       }
-    }, 800);
+    } catch (err) {
+      setError('Failed to connect to server. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyOtp = (e) => {
     e.preventDefault();
     setError('');
-    
     if (otp.length === 6) {
       setLoading(true);
+      // Generate session token and proceed
+      const token = btoa(`${phone}:${Date.now()}`);
+      sessionStorage.setItem(SESSION_TOKEN_KEY, token);
       setTimeout(() => {
         setLoading(false);
-        // OTP verified (demo accepts any 6 digits)
         navigate('/dashboard');
-      }, 1000);
+      }, 600);
     }
   };
 
-  const handleNavigateToRegister = () => {
-    navigate('/register');
-  };
+  const handleNavigateToRegister = () => navigate('/register');
 
   return (
     <div className="min-h-screen flex flex-col pt-24 bg-brand-50 relative overflow-hidden">

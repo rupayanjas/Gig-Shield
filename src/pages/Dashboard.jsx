@@ -16,7 +16,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   // Live backend data (fetched via API using the user's phone as key)
-  const { liveUser, triggers, claims, loading: liveLoading, error: liveError } = useLiveData(user?.phone);
+  const { liveUser, triggers, claims, loading: liveLoading, error: liveError, refresh } = useLiveData(user?.phone);
 
   useEffect(() => {
     const data = getUser();
@@ -95,6 +95,7 @@ export default function Dashboard() {
             claims={claims}
             loading={liveLoading}
             error={liveError}
+            onRefresh={refresh}
           />
         </ScrollReveal>
 
