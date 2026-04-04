@@ -223,7 +223,7 @@ export default function Register() {
                           type="text"
                           placeholder={`${platform} ID (e.g. ${platform.slice(0,3).toUpperCase()}-123)`}
                           value={partnerId}
-                          onChange={(e) => setPartnerId(e.target.value)}
+                          onChange={(e) => setPartnerId(e.target.value.toUpperCase())}
                           className="w-full bg-brand-50 border-none rounded-xl pl-12 pr-4 py-3.5 text-brand-900 placeholder:text-brand-400 focus:ring-2 focus:ring-brand-800 focus:outline-none transition-all"
                           required
                         />
