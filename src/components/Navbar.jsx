@@ -22,8 +22,16 @@ const Navbar = () => {
     <nav className="w-full px-6 py-6 absolute top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link to={isAuth ? "/dashboard" : "/"} className="text-2xl font-serif italic font-medium text-brand-900 tracking-tight">
-          Kizuna
+        <Link to={isAuth ? "/dashboard" : "/"} className="flex items-center gap-3">
+          <div className="relative group flex items-center gap-3">
+            <div className="relative w-10 h-10 bg-brand-900 rounded-lg flex items-center justify-center overflow-hidden">
+               <img src="/logo.png" alt="Kizuna" className="h-7 w-auto object-contain" />
+               <div className="absolute inset-0 bg-brand-900/10 mix-blend-overlay"></div>
+            </div>
+            <span className="font-serif text-2xl tracking-tighter text-brand-900 font-bold group-hover:text-brand-800 transition-colors">
+              Kizuna
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Nav Links */}
@@ -103,9 +111,7 @@ const Navbar = () => {
                 )}
               </div>
             </>
-          ) : (
-            <Button to="/login" variant="primary" size="sm" className="px-6 rounded-full font-medium">Get Started</Button>
-          )}
+          ) : null}
         </div>
       </div>
     </nav>

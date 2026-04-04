@@ -17,8 +17,8 @@ const Footer = () => {
         
         {/* Brand Col */}
         <div className="space-y-4">
-          <Link to="/" className="text-2xl font-serif italic font-medium text-brand-900">
-            Kizuna
+          <Link to="/">
+            <img src="/logo.png" alt="Kizuna" className="h-12 w-auto object-contain -ml-1 h-30" />
           </Link>
           <p className="text-brand-800 mt-2 max-w-xs">
             © 2024 Kizuna. Protective Editorial.<br/>

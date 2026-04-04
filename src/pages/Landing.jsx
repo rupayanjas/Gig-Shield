@@ -21,13 +21,19 @@ export default function Landing() {
             Income Protection <span className="italic">Built</span> for the Gig Economy
           </h1>
           
-          <p className="text-lg md:text-xl text-brand-800 mb-10 max-w-lg leading-relaxed">
-            Protect your earnings from weather, disruptions, and zones. Because you work hard, and your income should be certain.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button to="/login" size="lg">Get Shielded Today</Button>
-            <Button to="/coverage" variant="secondary" size="lg">View Coverage Plans</Button>
+          <div className="space-y-4 mb-10">
+            {[
+              "Protects your income from weather disruptions",
+              "Covers platform downtime and zone closures",
+              "Ensures consistent earnings even when you can’t work"
+            ].map((bullet, i) => (
+              <div key={i} className="flex items-center gap-3 text-brand-800">
+                <div className="w-5 h-5 rounded-full bg-brand-900 flex items-center justify-center text-white shrink-0">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <span className="font-medium">{bullet}</span>
+              </div>
+            ))}
           </div>
         </ScrollReveal>
 
