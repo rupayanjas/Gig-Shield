@@ -336,7 +336,7 @@ export default function Dashboard() {
       <ScrollReveal direction="up" delay={500} className="fixed bottom-6 right-6 z-50">
         <div className="bg-brand-900 text-brand-50 rounded-2xl p-4 shadow-2xl flex flex-col gap-3 min-w-[200px]">
           <span className="text-[10px] font-bold uppercase tracking-widest text-brand-400">
-            {liveLoading ? 'Loading…' : `${coverageTier.name} Plan`}
+            {liveLoading ? 'Loading…' : `${coverageTierName} Plan`}
           </span>
           <button className="bg-accent-light text-brand-900 font-medium py-2 px-4 rounded-xl text-sm hover:bg-white transition-colors">
             Upgrade Coverage
