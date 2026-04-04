@@ -95,11 +95,15 @@ export default function Register() {
     setIsSubmitting(true);
 
     try {
+      // The frontend simulates fetching partner history to set initial score
+      const initialTrustScore = isEShramVerified ? 85 : 65;
+
       // Build the payload to send to backend
       const payload = {
         phone,
         partnerId,
         city: currentCity ? currentCity.name : 'Mumbai',
+        trustScore: initialTrustScore,
         successfulDays: 0,
         cancellationRate: 0,
         claimsMade: 0,
@@ -108,6 +112,7 @@ export default function Register() {
 
       let backendUser = null;
       const createResult = await createUser(payload);
+
 
       if (createResult.success) {
         backendUser = createResult.data;

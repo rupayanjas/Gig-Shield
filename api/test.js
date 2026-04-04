@@ -31,8 +31,8 @@ export default async function handler(req, res) {
       try {
         const userData = req.body;
 
-        // Calculate trust score before saving
-        const trustScore = calculateTrustScore(userData);
+        // Calculate trust score before saving (unless explicitly provided, e.g. during registration)
+        const trustScore = userData.trustScore ?? calculateTrustScore(userData);
         userData.trustScore = trustScore;
 
         const user = await User.create(userData);
