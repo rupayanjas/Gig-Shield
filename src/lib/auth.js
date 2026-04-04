@@ -60,48 +60,71 @@ export const MOCK_USER = {
   }
 };
 
-export const login = (phone, platformId) => {
-  if (!phone || !platformId) return false;
+const USERS_KEY = 'kizuna_registered_users';
+const CURRENT_USER_KEY = 'kizuna_current_user';
+const SESSION_TOKEN_KEY = 'kizuna_session_token';
+
+// Helper to get all users
+const getAllUsers = () => {
+  const users = localStorage.getItem(USERS_KEY);
+  return users ? JSON.parse(users) : [MOCK_USER]; // Default to mock user for dev
+};
+
+export const login = (phone, password) => {
+  if (!phone) return false;
   
-  // Accept any login for demo
-  const token = btoa(`${phone}:${platformId}-${Date.now()}`);
-  sessionStorage.setItem('kizuna_session_token', token);
+  const users = getAllUsers();
+  const user = users.find(u => u.phone === phone);
   
-  // Check if user already exists in localstorage, otherwise use MOCK_USER
-  if (!localStorage.getItem('kizuna_user_profile')) {
-    localStorage.setItem('kizuna_user_profile', JSON.stringify(MOCK_USER));
+  if (user) {
+    // For demo, we accept any password if the phone exists
+    const token = btoa(`${phone}:${Date.now()}`);
+    sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    return true;
   }
-  return true;
+  
+  return false;
 };
 
 export const register = (phone, profileData) => {
   if (!phone) return false;
   
+  const users = getAllUsers();
+  
+  // Check if user already exists
+  if (users.some(u => u.phone === phone)) {
+    return false; 
+  }
+  
   const token = btoa(`${phone}-new-${Date.now()}`);
-  sessionStorage.setItem('kizuna_session_token', token);
+  sessionStorage.setItem(SESSION_TOKEN_KEY, token);
   
   // Merge the dynamically created profile with the mock outline so they have claims/history
   const fullProfile = {
     ...MOCK_USER,
-    ...profileData
+    ...profileData,
+    id: `USR-${Math.floor(Math.random() * 9000) + 1000}`
   };
   
-  localStorage.setItem('kizuna_user_profile', JSON.stringify(fullProfile));
+  users.push(fullProfile);
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(fullProfile));
+  
   return true;
 };
 
 export const logout = () => {
-  sessionStorage.removeItem('kizuna_session_token');
-  // keep localStorage profile to not lose demographic data if needed, but for security usually wipe it
-  localStorage.removeItem('kizuna_user_profile');
+  sessionStorage.removeItem(SESSION_TOKEN_KEY);
+  localStorage.removeItem(CURRENT_USER_KEY);
 };
 
 export const isAuthenticated = () => {
-  return !!sessionStorage.getItem('kizuna_session_token') && !!localStorage.getItem('kizuna_user_profile');
+  return !!sessionStorage.getItem(SESSION_TOKEN_KEY) && !!localStorage.getItem(CURRENT_USER_KEY);
 };
 
 export const getUser = () => {
   if (!isAuthenticated()) return null;
-  const user = localStorage.getItem('kizuna_user_profile');
+  const user = localStorage.getItem(CURRENT_USER_KEY);
   return user ? JSON.parse(user) : null;
 };

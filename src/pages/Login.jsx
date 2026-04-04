@@ -9,14 +9,20 @@ import { ScrollReveal } from '../components/ScrollReveal';
 const Login = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setError('');
+    
     if (phone) {
-      // Mock login always succeeds in demo if phone is provided
-      login(phone, 'Blinkit');
-      navigate('/dashboard');
+      const success = login(phone, password);
+      if (success) {
+        navigate('/dashboard');
+      } else {
+        setError('User not found. Please register to create an account.');
+      }
     }
   };
 
@@ -48,6 +54,12 @@ const Login = () => {
           <Card className="w-full shadow-soft scale-100 relative z-20">
             <form onSubmit={handleLogin} className="space-y-6">
               
+              {error && (
+                <div className="bg-red-50 border border-red-100 text-red-600 text-xs p-3 rounded-xl animate-in fade-in slide-in-from-top-1">
+                  {error}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <label className="text-xs font-bold text-brand-800 uppercase tracking-wider block">
                   Phone Number or Email

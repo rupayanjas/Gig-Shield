@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import { Button } from '../components/ui';
 import { ScrollReveal } from '../components/ScrollReveal';
 import { MapPin, CheckCircle, ChevronDown } from 'lucide-react';
+import DynamicPricingCalculator from '../components/DynamicPricingCalculator';
 
 const tiers = [
   {
@@ -203,6 +204,19 @@ export default function Coverage() {
                 </div>
               </div>
             </div>
+          </ScrollReveal>
+        </section>
+
+        {/* Dynamic Pricing Calculator Section */}
+        <section className="max-w-6xl mx-auto">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-serif mb-4">Calculate Your Dynamic Premium</h2>
+              <p className="text-brand-800 text-sm max-w-lg mx-auto">
+                Kizuna evaluates your unique risk profile using our AI engine. See how your identity, activity, and external risks impact your Trust Score and final weekly premium instantly.
+              </p>
+            </div>
+            <DynamicPricingCalculator />
           </ScrollReveal>
         </section>
 
