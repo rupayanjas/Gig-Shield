@@ -9,6 +9,33 @@ export default async function handler(req, res) {
   await dbConnect();
 
   switch (method) {
+    case 'GET': {
+      // Fetch all claims for a given userId
+      try {
+        const { userId } = req.query;
+
+        if (!userId) {
+          return res.status(400).json({
+            success: false,
+            message: 'userId is required as a query parameter.',
+          });
+        }
+
+        // Fetch claims and select only requested fields
+        const claims = await Claim.find({ userId })
+          .select('triggerId status payoutAmount createdAt')
+          .sort({ createdAt: -1 });
+
+        return res.status(200).json({
+          success: true,
+          count: claims.length,
+          data: claims,
+        });
+      } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+      }
+    }
+
     case 'POST': {
       // Manually create a claim for a specific user + trigger
       try {
@@ -92,7 +119,7 @@ export default async function handler(req, res) {
     }
 
     default:
-      res.setHeader('Allow', ['POST']);
+      res.setHeader('Allow', ['GET', 'POST']);
       return res.status(405).json({ success: false, message: `Method ${method} Not Allowed` });
   }
 }
