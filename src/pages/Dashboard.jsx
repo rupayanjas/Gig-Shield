@@ -7,11 +7,16 @@ import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, X, Shield, Activity, BarChart2, Bell } from 'lucide-react';
 import { cn } from '../components/ui';
 import { ScrollReveal } from '../components/ScrollReveal';
+import { useLiveData } from '../hooks/useLiveData';
+import LiveDataPanel from '../components/LiveDataPanel';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [showAlert, setShowAlert] = useState(true);
   const navigate = useNavigate();
+
+  // Live backend data (fetched via API using the user's phone as key)
+  const { liveUser, triggers, claims, loading: liveLoading, error: liveError } = useLiveData(user?.phone);
 
   useEffect(() => {
     const data = getUser();
@@ -80,6 +85,17 @@ export default function Dashboard() {
               Coverage active for {user.platform} in {user.zone}. Trust Score: <span className="font-bold">{user.trustScore}/100</span>
             </p>
           </div>
+        </ScrollReveal>
+
+        {/* ─── Live Backend Data Section ─── */}
+        <ScrollReveal direction="up" delay={150}>
+          <LiveDataPanel
+            liveUser={liveUser}
+            triggers={triggers}
+            claims={claims}
+            loading={liveLoading}
+            error={liveError}
+          />
         </ScrollReveal>
 
         {/* 3 Status Cards */}
