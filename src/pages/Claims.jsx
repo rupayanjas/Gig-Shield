@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Card, Button } from '../components/ui';
-import { CloudRain, AlertTriangle, Building2, WifiOff, Lock } from 'lucide-react';
+import { CloudRain, AlertTriangle, Building2, WifiOff, Lock, TrendingDown } from 'lucide-react';
 import { ScrollReveal } from '../components/ScrollReveal';
 
 export default function Claims() {
@@ -149,8 +149,8 @@ export default function Claims() {
                    <Building2 size={24} />
                  </div>
                  <div>
-                   <h3 className="font-bold text-brand-900 mb-1">Dark store downtime</h3>
-                   <p className="text-sm text-brand-800 leading-relaxed">Inventory system failures or physical hub closures.</p>
+                   <h3 className="font-bold text-brand-900 mb-1">Zone / Dark Store Closure</h3>
+                   <p className="text-sm text-brand-800 leading-relaxed">Store shutdowns or local zone closures affecting order flow.</p>
                  </div>
               </Card>
             </ScrollReveal>
@@ -160,44 +160,25 @@ export default function Claims() {
                    <WifiOff size={24} />
                  </div>
                  <div>
-                   <h3 className="font-bold text-brand-900 mb-1">App or UPI outages</h3>
-                   <p className="text-sm text-brand-800 leading-relaxed">Platform-wide technical failures preventing work completion.</p>
+                   <h3 className="font-bold text-brand-900 mb-1">App Downtime</h3>
+                   <p className="text-sm text-brand-800 leading-relaxed">Platform outages preventing order acceptance or completion.</p>
                  </div>
               </Card>
             </ScrollReveal>
             <ScrollReveal direction="left" delay={500}>
               <Card className="flex gap-6 items-start hover:border-brand-200 hover:shadow-premium transition-all">
                  <div className="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center text-brand-800 shrink-0">
-                   <Lock size={24} />
+                   <TrendingDown size={24} />
                  </div>
                  <div>
-                   <h3 className="font-bold text-brand-900 mb-1">Account freeze</h3>
-                   <p className="text-sm text-brand-800 leading-relaxed">Verified cases of temporary account blocking without cause.</p>
+                   <h3 className="font-bold text-brand-900 mb-1">Incentive Chain Break</h3>
+                   <p className="text-sm text-brand-800 leading-relaxed">Incentive loss caused due to disruption events.</p>
                  </div>
               </Card>
             </ScrollReveal>
           </div>
         </section>
 
-        {/* CTA */}
-         <ScrollReveal direction="up">
-          <section className="bg-[url('https://images.unsplash.com/photo-1555529902-5261145633bf?auto=format&fit=crop&q=80')] bg-cover bg-center rounded-[3rem] overflow-hidden relative group">
-            <div className="absolute inset-0 bg-brand-900/90 group-hover:bg-brand-900/80 transition-colors"></div>
-            <div className="relative z-10 p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-10">
-              <div className="max-w-xl">
-                <h2 className="text-4xl md:text-5xl font-serif text-brand-50 mb-6">
-                  Focus on your hustle, we'll handle the <span className="italic">rest.</span>
-                </h2>
-                <p className="text-brand-200 text-lg">
-                  Join 50,000+ gig workers who never worry about downtime again.
-                </p>
-              </div>
-              <Button className="bg-brand-50 text-brand-900 hover:bg-white border-none py-4 px-8 font-bold rounded-full whitespace-nowrap">
-                Upgrade Coverage
-              </Button>
-            </div>
-          </section>
-        </ScrollReveal>
 
       </main>
 
