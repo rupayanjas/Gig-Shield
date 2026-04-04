@@ -3,14 +3,15 @@ import User from '../models/User.js';
 import { calculateTrustScore } from '../lib/trustScore.js';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  try {
+    const { method } = req;
 
-  await dbConnect();
+    await dbConnect();
 
-  switch (method) {
-    case 'GET':
-      try {
-        const { phone } = req.query;
+    switch (method) {
+      case 'GET':
+        try {
+          const { phone } = req.query;
         // If phone query param is provided, find a single user
         if (phone) {
           const user = await User.findOne({ phone });
@@ -55,8 +56,12 @@ export default async function handler(req, res) {
       break;
 
     default:
-      res.setHeader('Allow', ['GET', 'POST']);
-      res.status(405).json({ success: false, message: `Method ${method} Not Allowed` });
-      break;
+        res.setHeader('Allow', ['GET', 'POST']);
+        res.status(405).json({ success: false, message: `Method ${method} Not Allowed` });
+        break;
+    }
+  } catch (globalError) {
+    console.error('API /test Global Error:', globalError);
+    return res.status(500).json({ success: false, message: `Global Server Error: ${globalError.message}` });
   }
 }

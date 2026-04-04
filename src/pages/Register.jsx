@@ -113,25 +113,31 @@ export default function Register() {
       let backendUser = null;
       const createResult = await createUser(payload);
 
-
       if (createResult.success) {
         backendUser = createResult.data;
       } else if (createResult.message?.includes('already exists')) {
         // User already registered → fetch them
         const fetchResult = await getUserByPhone(phone);
-        if (fetchResult.success) backendUser = fetchResult.data;
+        if (fetchResult.success) {
+          backendUser = fetchResult.data;
+        } else {
+          throw new Error('User exists but failed to fetch data.');
+        }
+      } else {
+        // Throw any generic string from our custom error wrapper
+        throw new Error(createResult.message || `Server error during creation`);
       }
 
       // Build full local profile merging the backend data with UI-only fields
       const profileData = {
         ...MOCK_USER,
-        ...(backendUser || {}),
+        ...backendUser,
         name,
         phone,
         platform,
         partnerId,
         zone: currentCity ? currentCity.name : 'Unknown',
-        trustScore: backendUser?.trustScore ?? (isEShramVerified ? 85 : 65),
+        trustScore: backendUser.trustScore ?? (isEShramVerified ? 85 : 65),
         eShramVerified: isEShramVerified,
         zoneRisk: currentCity ? currentCity.risk.toUpperCase() : 'MEDIUM',
         premium: {
@@ -144,7 +150,7 @@ export default function Register() {
           icon: tier.icon,
           hours: tier.payout * 4,
         },
-        id: backendUser?._id || `USR-${Math.floor(Math.random() * 9000) + 1000}`,
+        id: backendUser._id,
       };
 
       // Persist to localStorage & create session
@@ -155,10 +161,8 @@ export default function Register() {
       navigate('/dashboard');
     } catch (err) {
       console.error('Registration error:', err);
-      // Fallback: save locally and proceed (never block the user)
-      const token = btoa(`${phone}:${Date.now()}`);
-      sessionStorage.setItem(SESSION_TOKEN_KEY, token);
-      navigate('/dashboard');
+      // DO NOT navigate away. Alert the user immediately exactly what went wrong.
+      alert(`Registration Failed: ${err.message}`);
     } finally {
       setIsSubmitting(false);
     }
