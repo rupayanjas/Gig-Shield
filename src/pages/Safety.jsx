@@ -23,8 +23,8 @@ export default function Safety() {
 
   if (!user) return null;
 
-  // LIVE: real trust score from backend
-  const trustScore = liveUser?.trustScore ?? user.trustScore;
+  // LIVE: real trust score — null while loading (prevents stale mock flash)
+  const trustScore = liveUser?.trustScore ?? null;
 
   // LIVE: real city from backend user
   const city = liveUser?.city ?? user.zone ?? 'Your Zone';
@@ -32,12 +32,14 @@ export default function Safety() {
   // LIVE: risk level derived from active triggers count
   const { level: riskLevel, prob: riskProb } = getRiskLevel(triggers);
 
-  // LIVE: standing label based on actual trust score
+  // LIVE: standing label based on actual trust score (only after loaded)
   const standingLabel =
+    trustScore === null ? '…' :
     trustScore > 80 ? 'Excellent Standing' :
     trustScore >= 50 ? 'Good Standing' :
     'Needs Improvement';
   const standingCls =
+    trustScore === null ? 'text-brand-400' :
     trustScore > 80 ? 'text-green-600' :
     trustScore >= 50 ? 'text-amber-600' :
     'text-red-500';
@@ -62,7 +64,7 @@ export default function Safety() {
             <div className="flex justify-between items-start mb-4 z-10">
               <span className="text-[10px] font-bold text-brand-500 uppercase tracking-widest">Trust Score</span>
             </div>
-            {loading ? (
+            {loading || trustScore === null ? (
               <div className="space-y-2 animate-pulse">
                 <div className="h-12 w-24 bg-brand-100 rounded" />
                 <div className="h-3 w-32 bg-brand-100 rounded" />
@@ -75,7 +77,7 @@ export default function Safety() {
                 </div>
                 <p className={cn('text-sm font-medium z-10', standingCls)}>{standingLabel}</p>
                 <p className="text-xs text-brand-500 mt-4 z-10">
-                  Based on delivery history and platform {liveUser?.partnerId ? `partner data` : `${user.platform} data`}.
+                  Based on delivery history and platform {liveUser?.partnerId ? 'partner data' : `${user.platform} data`}.
                 </p>
               </>
             )}

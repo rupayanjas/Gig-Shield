@@ -17,20 +17,26 @@ export default function Insurance() {
     else navigate('/login');
   }, [navigate]);
 
-  // Live data for trust score and derived coverage tier
   const { liveUser, loading } = useLiveData(user?.phone);
 
   if (!user) return null;
 
-  // LIVE: derive coverage tier from real trust score
-  const trustScore   = liveUser?.trustScore ?? user.trustScore;
-  const coverageTier = getCoverageTier(trustScore);
+  // LIVE: real trust score from backend (null while loading)
+  const trustScore = liveUser?.trustScore ?? null;
 
-  // LIVE: premium reason from backend user's city
-  const city         = liveUser?.city ?? user.zone;
-  const premiumNote  = `${city} — based on Trust Score ${trustScore}`;
+  // SELECTED PLAN: use what the user picked at registration — not derived from score
+  const selectedTier = user.coverageTier?.name
+    ? user.coverageTier
+    : getCoverageTier(trustScore ?? 50);
+  const coverageName  = selectedTier.name;    // Basic / Plus / Pro
+  const coverageHours = selectedTier.hours;   // 100 / 120 / 160
 
-  // HARDCODED: premium amount stays from localStorage profile (set at registration)
+  // LIVE: premium note uses real city + real trust score
+  const city = liveUser?.city ?? user.zone;
+  const scoreDisplay = loading ? '…' : trustScore !== null ? trustScore : (user.trustScore ?? 50);
+  const premiumNote = `${city} — based on Trust Score ${scoreDisplay}`;
+
+  // LIVE: premium amount from registration (stored in localStorage)
   const premiumAmount    = user.premium?.amount ?? 79;
   const premiumFrequency = user.premium?.frequency ?? 'week';
 
@@ -57,12 +63,12 @@ export default function Insurance() {
               </span>
             </div>
             <h3 className="font-serif text-3xl text-brand-900 mb-4 z-10">
-              {loading ? <span className="opacity-40">…</span> : `Coverage ${coverageTier.name}`}
+              {`Coverage ${coverageName}`}
             </h3>
             <ul className="space-y-3 z-10 mb-8 flex-1">
               <li className="flex items-center gap-2 text-sm text-brand-800">
                 <Shield size={16} className="text-brand-500" />
-                {loading ? '…' : `${coverageTier.hours} hours of monthly protection`}
+                {`${coverageHours} hours of monthly protection`}
               </li>
               <li className="flex items-center gap-2 text-sm text-brand-800">
                 <Shield size={16} className="text-brand-500" />

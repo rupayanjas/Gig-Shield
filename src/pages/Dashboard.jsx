@@ -39,10 +39,16 @@ export default function Dashboard() {
   }).join(' ');
 
   // ── DERIVED from live data ──
-  const trustScore  = liveUser?.trustScore ?? user.trustScore;
+  // Use the REAL backend trust score; show '…' while loading to avoid stale mock flash
+  const trustScore     = liveUser?.trustScore ?? null;
   const shieldedIncome = getShieldedIncome(claims);
-  const coverageTier   = getCoverageTier(trustScore);
   const { level: riskLevel, prob: riskProb } = getRiskLevel(triggers);
+
+  // Coverage tier: ALWAYS use the plan the user selected at registration (localStorage)
+  // getCoverageTier is only a fallback if no tier was stored
+  const selectedTier = user.coverageTier?.name ? user.coverageTier : getCoverageTier(trustScore ?? 50);
+  const coverageTierName  = selectedTier.name;    // e.g. Basic / Plus / Pro / Premium
+  const coverageTierHours = selectedTier.hours;   // e.g. 100 / 120 / 160
 
   // Status badge helpers
   const claimStatusCls = {
@@ -85,10 +91,10 @@ export default function Dashboard() {
             </div>
             <h1 className="text-5xl font-serif text-brand-900 mb-2">Your Shield Status</h1>
             <p className="text-brand-800 text-sm">
-              Coverage active for {user.platform} in {user.zone}.{' '}
+              Coverage active for {user.platform} in {liveUser?.city ?? user.zone}.{' '}
               Trust Score:{' '}
               <span className="font-bold">
-                {liveLoading ? '…' : `${trustScore}/100`}
+                {liveLoading ? '…' : trustScore !== null ? `${trustScore}/100` : `${user.trustScore}/100`}
               </span>
             </p>
           </div>
@@ -123,12 +129,11 @@ export default function Dashboard() {
                 </span>
               </div>
               <h3 className="font-serif text-2xl text-brand-900 mb-auto z-10">
-                {liveLoading ? '…' : `Coverage · ${coverageTier.name}`}
+                {`Coverage · ${coverageTierName}`}
               </h3>
               <div className="mt-8 flex justify-between items-end z-10">
                 <div>
-                  <p className="text-sm font-medium text-brand-800">{coverageTier.hours} hrs/month protected</p>
-                  {/* HARDCODED: premium amounts stay static */}
+                  <p className="text-sm font-medium text-brand-800">{coverageTierHours} hrs/month protected</p>
                   <p className="text-xs text-brand-400 mt-1">Premium: ₹{user.premium.amount}/{user.premium.frequency}</p>
                 </div>
                 <div className="w-12 h-6 bg-brand-800 rounded-full flex items-center p-1 cursor-not-allowed">
